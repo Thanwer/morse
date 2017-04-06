@@ -1,7 +1,8 @@
 package com.thanwer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,11 +29,11 @@ public class PeerController {
         return peerRepository.findAll();
     }
 
-    @RequestMapping(value = "/add",method = RequestMethod.PUT)
-    public List<Peer> add(@RequestBody Peer peer){
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    public ResponseEntity<Peer> add(@RequestBody Peer peer){
         peerRepository.save(peer);
 
-        return peerRepository.findAll();
+        return new ResponseEntity<>(peer, HttpStatus.OK);
     }
 
 }
