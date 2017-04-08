@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * Created by Thanwer on 05/04/2017.
@@ -15,11 +16,19 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
+    private String author;
+    private Date createDate;
     private String text;
 
-    public Message() {}
+    public Message(Message message) {}
 
     public Message(String text) {
+        this.text = text;
+    }
+
+    public Message(String author, Date createDate, String text) {
+        this.author = author;
+        this.createDate = createDate;
         this.text = text;
     }
 
@@ -29,5 +38,21 @@ public class Message {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
