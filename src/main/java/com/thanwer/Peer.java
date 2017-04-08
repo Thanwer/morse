@@ -17,14 +17,16 @@ public class Peer {
     private long id;
 
     private String name;
-    private String ip;
+    private String ipWAN;
+    private String ipLAN;
     private int port;
 
     public Peer(){}
 
-    public Peer(String name, String ip, int port) {
+    public Peer(String name, String ipWAN, String ipLAN, int port) {
         this.name = name;
-        this.ip = ip;
+        this.ipWAN = ipWAN;
+        this.ipLAN = ipLAN;
         this.port = port;
     }
 
@@ -32,8 +34,10 @@ public class Peer {
         return name;
     }
 
-    public String getIp() {
-        return ip;
+    public String getIpLAN() { return ipLAN; }
+
+    public String getIpWAN() {
+        return ipWAN;
     }
 
     public int getPort() {
@@ -43,4 +47,6 @@ public class Peer {
     public long getId() {
         return id;
     }
+
+
 }

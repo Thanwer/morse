@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import javax.activation.CommandObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +19,9 @@ import java.util.List;
 @Component
 public class PeerSeeder implements CommandLineRunner{
     private PeerRepository peerRepository;
+    private String ipWAN;
+    private String ipLAN;
+
 
     @Autowired
     public PeerSeeder(PeerRepository peerRepository){
@@ -25,7 +32,16 @@ public class PeerSeeder implements CommandLineRunner{
     public void run(String... strings) throws Exception{
         List<Peer> peers = new ArrayList<>();
 
-        peers.add(new Peer("Thanwer", "127.0.0.1", 8000));
+        URL whatismyip = new URL("http://checkip.amazonaws.com");
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                whatismyip.openStream()));
+        ipWAN = in.readLine();
+
+        InetAddress addr = InetAddress.getLocalHost();
+        ipLAN = (addr.getHostAddress());
+
+
+        peers.add(new Peer("local", ipWAN, ipLAN, 8080));
 
         peerRepository.save(peers);
     }
