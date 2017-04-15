@@ -20,7 +20,7 @@ public class Message {
     private Date createDate;
     private String text;
 
-    public Message(Message message) {}
+    public Message() {}
 
     public Message(String text) {
         this.text = text;
@@ -54,5 +54,14 @@ public class Message {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "author='" + author + '\'' +
+                ", createDate=" + createDate +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

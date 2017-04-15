@@ -32,9 +32,11 @@ public class MessageController {
     @RequestMapping(value = "/receive",method = RequestMethod.POST)
     public ResponseEntity<Message> add(@RequestBody Message message){
         messageRepository.save(message);
-        System.out.println(message.getText());
+        System.out.println(message.toString());
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
+
 
 }
