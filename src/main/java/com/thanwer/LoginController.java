@@ -3,10 +3,9 @@ package com.thanwer;
 /**
  * Created by Thanwer on 15/04/2017.
  */
+
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.PagedList;
-import org.springframework.social.facebook.api.Post;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +33,8 @@ public class LoginController {
         String [] fields = { "id", "email",  "first_name", "last_name" };
         //model.addAttribute("facebookProfile", facebook.userOperations().getUserProfile());
         model.addAttribute("facebookProfile", facebook.fetchObject("me", User.class, fields));
-        model.addAttribute("feed", feed);
-        return "login";
+        //model.addAttribute("feed", feed);
+        return "chat";
     }
 
 }

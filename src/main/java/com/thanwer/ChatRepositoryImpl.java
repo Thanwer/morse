@@ -5,12 +5,12 @@ package com.thanwer;
  */
 
 
-import java.util.Collections;
-        import java.util.List;
-        import java.util.concurrent.CopyOnWriteArrayList;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
-        import org.springframework.stereotype.Repository;
-        import org.springframework.util.Assert;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class ChatRepositoryImpl implements ChatRepository {

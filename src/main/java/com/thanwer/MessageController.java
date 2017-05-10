@@ -15,8 +15,9 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping(value = "/messages", method = RequestMethod.GET)
+@RequestMapping(value = "/messages")
 public class MessageController {
+
     private MessageRepository messageRepository;
 
     @Autowired
@@ -24,19 +25,18 @@ public class MessageController {
         this.messageRepository = messageRepository;
     }
 
-    @RequestMapping(value = "/all",method = RequestMethod.GET)
+    @RequestMapping(method=RequestMethod.GET)
     public List<Message> getAll(){
         return messageRepository.findAll();
     }
 
-    @RequestMapping(value = "/receive",method = RequestMethod.POST)
+
+    @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Message> add(@RequestBody Message message){
         messageRepository.save(message);
         System.out.println(message.toString());
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
-
-
 
 }

@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -23,6 +24,13 @@ public class Message {
     public Message() {}
 
     public Message(String text) {
+        this.text = text;
+        this.createDate = Date.from(Instant.now());
+    }
+
+    public Message(String author, String text) {
+        this.author = author;
+        this.createDate = Date.from(Instant.now());
         this.text = text;
     }
 
@@ -63,5 +71,9 @@ public class Message {
                 ", createDate=" + createDate +
                 ", text='" + text + '\'' +
                 '}';
+    }
+
+    public long getId() {
+        return id;
     }
 }
