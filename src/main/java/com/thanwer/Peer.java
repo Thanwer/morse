@@ -48,5 +48,11 @@ public class Peer {
         return id;
     }
 
-
+    @Override
+    public String toString() {
+        return "Peer{" +
+                "name='" + name + '\'' +
+                ", ipLAN='" + ipLAN + '\'' +
+                '}';
+    }
 }

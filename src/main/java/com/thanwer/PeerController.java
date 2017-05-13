@@ -26,14 +26,24 @@ public class PeerController {
 
     @RequestMapping(value = "/all",method = RequestMethod.GET)
     public List<Peer> getAll(){
-        return peerRepository.findAll();
+        List<Peer> p = peerRepository.findAll();
+        for (Peer obj: p){
+            System.out.println(obj.toString());
+        }
+
+
+        return p;
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ResponseEntity<Peer> add(@RequestBody Peer peer){
         peerRepository.save(peer);
-
+        System.out.println(peer.toString());
         return new ResponseEntity<>(peer, HttpStatus.OK);
     }
 
+
+    public PeerRepository getPeerRepository() {
+        return peerRepository;
+    }
 }

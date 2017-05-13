@@ -1,5 +1,10 @@
 package com.thanwer;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -67,9 +72,8 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "author='" + author + '\'' +
-                ", createDate=" + createDate +
-                ", text='" + text + '\'' +
+                "User= '" + author + '\'' +
+                ", Text='" + text + '\'' +
                 '}';
     }
 

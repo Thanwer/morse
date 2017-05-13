@@ -21,30 +21,15 @@ public class MessageSeeder implements CommandLineRunner{
     private MessageRepository messageRepository;
 
     @Autowired
-
     public MessageSeeder(MessageRepository messageRepository) {this.messageRepository = messageRepository; }
 
     @Override
     public void run(String... strings) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         List<Message> messages = new ArrayList<>();
 
         messages.add(new Message("."));
-
+        MessageSender.sendMessage("127.0.0.1","Test OK");
         messageRepository.save(messages);
-
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        String url = "http://localhost:8080/messages";
-        Message test = new Message("Tester","Test Text");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        String jsonMessage = mapper.writeValueAsString(test);
-        HttpEntity<String> entity = new HttpEntity<String>(jsonMessage,headers);
-        restTemplate.postForObject(url, entity, String.class);
-
 
     }
 
