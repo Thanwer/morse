@@ -13,7 +13,34 @@ import java.util.List;
 /**
  * Created by Thanwer on 02/04/2017.
  */
+@RestController
+@RequestMapping(value = "/peer")
+public class PeerController {
 
+    private PeerRepository peerRepository;
+
+    @Autowired
+    public PeerController(PeerRepository peerRepository){
+        this.peerRepository = peerRepository;
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
+    public List<Peer> getAll(){
+        return peerRepository.findAll();
+    }
+
+
+    @RequestMapping(method=RequestMethod.POST)
+    public ResponseEntity<Peer> add(@RequestBody Peer peer){
+        peerRepository.save(peer);
+        System.out.println(peer.toString());
+
+        return new ResponseEntity<>(peer, HttpStatus.OK);
+    }
+
+}
+
+/*
 @RestController
 @RequestMapping(value = "/peer", method = RequestMethod.GET)
 public class PeerController {
@@ -47,3 +74,4 @@ public class PeerController {
         return peerRepository;
     }
 }
+*/

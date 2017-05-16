@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Scanner;
+import java.util.Timer;
 
 
 @SpringBootApplication
@@ -15,7 +16,9 @@ public class PiApplication {
 		SpringApplication.run(PiApplication.class, args);
 
         (new Thread(new LocalPeerDiscovery())).start();
-        (new Thread(new LocalPeerDiscoveryClient())).start();
+        //(new Thread(new LocalPeerDiscoveryClient())).start();
+        Timer timer = new Timer();
+        timer.schedule(new LocalPeerDiscoveryClient(), 0, 5000);
 
 
 		String s = "";

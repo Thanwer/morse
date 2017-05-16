@@ -1,21 +1,32 @@
 package com.thanwer;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.thanwer.PeerSender.sendPeer;
 
 /**
  * Created by Thanwer on 15/05/2017.
  */
-public class LocalPeerDiscoveryClient implements Runnable {
+@Component
+public class LocalPeerDiscoveryClient extends TimerTask {
 
-    private PeerRepository peerRepository;
+
     DatagramSocket c;
     private List<Peer> peers = new ArrayList<>();
+
+    @Autowired
+    private PeerRepository peerRepository;
 
     @Override
     public void run() {
@@ -75,8 +86,7 @@ public class LocalPeerDiscoveryClient implements Runnable {
             String message = new String(receivePacket.getData()).trim();
             if (message.equals("MORSE_Response")) {
                 //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
-                peers.add(new Peer(message, receivePacket.getAddress()));
-                peerRepository.save(peers);
+                sendPeer(new Peer(message, receivePacket.getAddress()));
             }
 
             //Close the port!
