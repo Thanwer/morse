@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.thanwer</groupId>
-	<artifactId>pi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>morse</artifactId>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>pi</name>
-	<description>Demo project for Spring Boot</description>
+	<name>morse</name>
+	<description>P2P Chat Software</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -25,8 +25,8 @@
 	</properties>
 	<repositories>
 		<repository>
-			<id>tomp2p.net</id>
-			<url>http://tomp2p.net/dev/mvn/</url>
+			<id>org.freepastry</id>
+			<url>http://maven.nuiton.org/release/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -104,9 +104,9 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.tomp2p</groupId>
-			<artifactId>tomp2p-all</artifactId>
-			<version>5.0-Beta8</version>
+			<groupId>org.freepastry</groupId>
+			<artifactId>pastry</artifactId>
+			<version>2.1</version>
 		</dependency>
 
 	</dependencies>
@@ -125,42 +125,6 @@
 					<execution>
 						<goals>
 							<goal>repackage</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.2</version>
-				<configuration>
-					<installDirectory>target</installDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<configuration>
-							<nodeVersion>v4.4.5</nodeVersion>
-							<npmVersion>3.9.2</npmVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>webpack build</id>
-						<goals>
-							<goal>webpack</goal>
 						</goals>
 					</execution>
 				</executions>

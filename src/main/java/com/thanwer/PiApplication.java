@@ -13,6 +13,11 @@ public class PiApplication {
 
 	public static void main(String[] args) throws ResourceAccessException {
 		SpringApplication.run(PiApplication.class, args);
+
+        (new Thread(new LocalPeerDiscovery())).start();
+        (new Thread(new LocalPeerDiscoveryClient())).start();
+
+
 		String s = "";
 		String ip;
 		while (!s.equals("OK")) {

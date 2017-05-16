@@ -18,8 +18,8 @@ import java.util.List;
 @Component
 public class PeerSeeder implements CommandLineRunner{
     private PeerRepository peerRepository;
-    private String ipWAN;
-    private String ipLAN;
+    private InetAddress ipWAN;
+    private InetAddress ipLAN;
 
 
     @Autowired
@@ -34,10 +34,10 @@ public class PeerSeeder implements CommandLineRunner{
         URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 whatismyip.openStream()));
-        ipWAN = in.readLine();
+        ipWAN = InetAddress.getByName(in.readLine());
 
         InetAddress addr = InetAddress.getLocalHost();
-        ipLAN = (addr.getHostAddress());
+        ipLAN = InetAddress.getByName(addr.getHostAddress());
 
 
         peers.add(new Peer("local", ipWAN, ipLAN, 8080));

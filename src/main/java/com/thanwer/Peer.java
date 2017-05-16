@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.net.InetAddress;
 
 /**
  * Created by Thanwer on 02/04/2017.
@@ -17,13 +18,16 @@ public class Peer {
     private long id;
 
     private String name;
-    private String ipWAN;
-    private String ipLAN;
+    private InetAddress ipWAN;
+    private InetAddress ipLAN;
     private int port;
 
-    public Peer(){}
+    public Peer(String name, InetAddress ipLAN) {
+        this.name = name;
+        this.ipLAN = ipLAN;
+    }
 
-    public Peer(String name, String ipWAN, String ipLAN, int port) {
+    public Peer(String name, InetAddress ipWAN, InetAddress ipLAN, int port) {
         this.name = name;
         this.ipWAN = ipWAN;
         this.ipLAN = ipLAN;
@@ -34,9 +38,9 @@ public class Peer {
         return name;
     }
 
-    public String getIpLAN() { return ipLAN; }
+    public InetAddress getIpLAN() { return ipLAN; }
 
-    public String getIpWAN() {
+    public InetAddress getIpWAN() {
         return ipWAN;
     }
 
