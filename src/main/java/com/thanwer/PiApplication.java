@@ -15,25 +15,33 @@ public class PiApplication {
 	public static void main(String[] args) throws ResourceAccessException {
 		SpringApplication.run(PiApplication.class, args);
 
-        (new Thread(new LocalPeerDiscovery())).start();
         //(new Thread(new LocalPeerDiscoveryClient())).start();
-        Timer timer = new Timer();
-        timer.schedule(new LocalPeerDiscoveryClient(), 0, 5000);
+        System.out.println("\nName: ");
+        Scanner scan = new Scanner(System.in);
+        String name = scan.next();
 
+		new Thread(new PeerSeeder(name)).start();
+        new Thread(new LocalPeerDiscovery(name)).start();
+
+        Timer timer = new Timer();
+        timer.schedule(new LocalPeerDiscoveryClient(), 0, 60000);
 
 		String s = "";
-		String ip;
+		String id;
 		while (!s.equals("OK")) {
+            System.out.println("Peer List: ");
+            PeerUtil.getPeer();
+            System.out.println();
+            System.out.println();
 
-
-			System.out.println("\nIP: ");
-			Scanner scan = new Scanner(System.in);
-			ip = scan.next();
+			System.out.println("\nName: ");
+			Scanner scan1 = new Scanner(System.in);
+			id = scan1.next();
 			System.out.println("Text: ");
-			s = scan.next();
+			s = scan1.next();
 
             try {
-                MessageSender.sendMessage(ip,s);
+                MessageUtil.sendMessage(id,s);
             } catch (ResourceAccessException e) {
                 System.out.println("Host not found.");
             } catch (JsonProcessingException e) {

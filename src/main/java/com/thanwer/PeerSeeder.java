@@ -1,28 +1,26 @@
 package com.thanwer;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.UnknownHostException;
+
+import static com.thanwer.PeerUtil.sendPeer;
 
 /**
  * Created by Thanwer on 02/04/2017.
  */
 
-@Component
-public class PeerSeeder implements CommandLineRunner{
-    private PeerRepository peerRepository;
-    private InetAddress ipWAN;
+public class PeerSeeder implements Runnable{
+    //private PeerRepository peerRepository;
+    //private InetAddress ipWAN;
     private InetAddress ipLAN;
+    private String name;
+    public PeerSeeder(String name){
+        this.name=name;
+    }
 
-
-    @Autowired
+    /*@Autowired
     public PeerSeeder(PeerRepository peerRepository){
         this.peerRepository = peerRepository;
     }
@@ -32,17 +30,42 @@ public class PeerSeeder implements CommandLineRunner{
         List<Peer> peers = new ArrayList<>();
 
         URL whatismyip = new URL("http://checkip.amazonaws.com");
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                whatismyip.openStream()));
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader(
+                    whatismyip.openStream()));
+        } catch (IOException e) {
+            System.err.println("Get WAN Address... Timeout...");
+        }
         ipWAN = InetAddress.getByName(in.readLine());
 
         InetAddress addr = InetAddress.getLocalHost();
         ipLAN = InetAddress.getByName(addr.getHostAddress());
 
 
-        peers.add(new Peer("local", ipWAN, ipLAN, 8080));
+        peers.add(new Peer("local", ipLAN));
 
         peerRepository.save(peers);
-    }
+    }*/
 
+    @Override
+    public void run() {
+        InetAddress addr = null;
+        try {
+            addr = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        try {
+            ipLAN = InetAddress.getByName(addr.getHostAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        try {
+            sendPeer(new Peer(name, ipLAN));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

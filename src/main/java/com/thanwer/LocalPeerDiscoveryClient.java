@@ -1,7 +1,6 @@
 package com.thanwer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,7 +12,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.thanwer.PeerSender.sendPeer;
+import static com.thanwer.PeerUtil.sendPeer;
 
 /**
  * Created by Thanwer on 15/05/2017.
@@ -42,7 +41,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             try {
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"), 8888);
                 c.send(sendPacket);
-                System.out.println(getClass().getName() + ">>> Request packet sent to: 255.255.255.255 (DEFAULT)");
+                //System.out.println(getClass().getName() + ">>> Request packet sent to: 255.255.255.255 (DEFAULT)");
             } catch (Exception e) {
             }
 
@@ -68,11 +67,11 @@ public class LocalPeerDiscoveryClient extends TimerTask {
                     } catch (Exception e) {
                     }
 
-                    System.out.println(getClass().getName() + ">>> Request packet sent to: " + broadcast.getHostAddress() + "; Interface: " + networkInterface.getDisplayName());
+                    //System.out.println(getClass().getName() + ">>> Request packet sent to: " + broadcast.getHostAddress() + "; Interface: " + networkInterface.getDisplayName());
                 }
             }
 
-            System.out.println(getClass().getName() + ">>> Done looping over all network interfaces. Now waiting for a reply!");
+            //System.out.println(getClass().getName() + ">>> Done looping over all network interfaces. Now waiting for a reply!");
 
             //Wait for a response
             byte[] recvBuf = new byte[15000];
@@ -80,14 +79,14 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             c.receive(receivePacket);
 
             //We have a response
-            System.out.println(getClass().getName() + ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
+            //System.out.println(getClass().getName() + ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
 
             //Check if the message is correct
             String message = new String(receivePacket.getData()).trim();
-            if (message.equals("MORSE_Response")) {
+            //if (message.equals("MORSE_Response")) {
                 //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
-                sendPeer(new Peer(message, receivePacket.getAddress()));
-            }
+            sendPeer(new Peer(message, receivePacket.getAddress()));
+            //}
 
             //Close the port!
             c.close();

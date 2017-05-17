@@ -14,6 +14,11 @@ import java.util.logging.Logger;
 public class LocalPeerDiscovery implements Runnable {
 
     DatagramSocket socket;
+    String name;
+
+    public LocalPeerDiscovery(String name) {
+        this.name = name;
+    }
 
     @Override
     public void run() {
@@ -23,7 +28,7 @@ public class LocalPeerDiscovery implements Runnable {
             socket.setBroadcast(true);
 
             while (true) {
-                System.out.println(getClass().getName() + ">>>Ready to receive broadcast packets!");
+                //System.out.println(getClass().getName() + ">>>Ready to receive broadcast packets!");
 
                 //Receive a packet
                 byte[] recvBuf = new byte[15000];
@@ -31,30 +36,30 @@ public class LocalPeerDiscovery implements Runnable {
                 socket.receive(packet);
 
                 //Packet received
-                System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
-                System.out.println(getClass().getName() + ">>>Packet received; data: " + new String(packet.getData()));
+                //System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
+                //System.out.println(getClass().getName() + ">>>Packet received; data: " + new String(packet.getData()));
 
                 //See if the packet holds the right command (message)
                 String message = new String(packet.getData()).trim();
                 if (message.equals("MORSE")) {
-                    byte[] sendData = "MORSE_Response".getBytes();
+                    byte[] sendData = name.getBytes();
 
                     //Send a response
                     DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, packet.getAddress(), packet.getPort());
                     socket.send(sendPacket);
 
-                    System.out.println(getClass().getName() + ">>>Sent packet to: " + sendPacket.getAddress().getHostAddress());
+                    //System.out.println(getClass().getName() + ">>>Sent packet to: " + sendPacket.getAddress().getHostAddress());
                 }
             }
         } catch (IOException ex) {
             Logger.getLogger(LocalPeerDiscovery.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public static LocalPeerDiscovery getInstance() {
+    /*public static LocalPeerDiscovery getInstance() {
         return LocalPeerDiscoveryHolder.INSTANCE;
     }
 
     private static class LocalPeerDiscoveryHolder {
         private static final LocalPeerDiscovery INSTANCE = new LocalPeerDiscovery();
-    }
+    }*/
 }

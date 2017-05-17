@@ -33,7 +33,7 @@ public class PeerController {
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Peer> add(@RequestBody Peer peer){
         peerRepository.save(peer);
-        System.out.println(peer.toString());
+        //System.out.println(peer.toString());
 
         return new ResponseEntity<>(peer, HttpStatus.OK);
     }

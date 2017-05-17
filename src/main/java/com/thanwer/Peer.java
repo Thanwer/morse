@@ -13,26 +13,36 @@ import java.net.InetAddress;
 @Entity
 public class Peer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
+    //private long id;
+
+
 
     private String name;
-    private InetAddress ipWAN;
+    //private InetAddress ipWAN;
+    @Id
     private InetAddress ipLAN;
-    private int port;
+    //private int port;
+
+    public Peer() {}
 
     public Peer(String name, InetAddress ipLAN) {
         this.name = name;
         this.ipLAN = ipLAN;
     }
 
-    public Peer(String name, InetAddress ipWAN, InetAddress ipLAN, int port) {
+    public Peer(String name, InetAddress ipLAN, InetAddress id) {
+        this.name = name;
+        this.ipLAN = ipLAN;
+    }
+
+    /*public Peer(String name, InetAddress ipWAN, InetAddress ipLAN, int port) {
         this.name = name;
         this.ipWAN = ipWAN;
         this.ipLAN = ipLAN;
         this.port = port;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -40,23 +50,20 @@ public class Peer {
 
     public InetAddress getIpLAN() { return ipLAN; }
 
-    public InetAddress getIpWAN() {
+    /*public InetAddress getIpWAN() {
         return ipWAN;
-    }
+    }*/
 
-    public int getPort() {
+    /*public int getPort() {
         return port;
-    }
+    }*/
 
-    public long getId() {
-        return id;
+    public InetAddress getId() {
+        return ipLAN;
     }
 
     @Override
     public String toString() {
-        return "Peer{" +
-                "name='" + name + '\'' +
-                ", ipLAN='" + ipLAN + '\'' +
-                '}';
+        return "Name=" + name + " IP=" + ipLAN;
     }
 }

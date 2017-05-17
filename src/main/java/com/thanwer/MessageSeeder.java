@@ -1,13 +1,8 @@
 package com.thanwer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +23,7 @@ public class MessageSeeder implements CommandLineRunner{
         List<Message> messages = new ArrayList<>();
 
         messages.add(new Message("."));
-        MessageSender.sendMessage("127.0.0.1","Test OK");
+        //MessageUtil.sendMessage("127.0.0.1","Test OK");
         messageRepository.save(messages);
 
     }

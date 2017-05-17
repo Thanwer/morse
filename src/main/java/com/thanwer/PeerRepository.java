@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PeerRepository extends JpaRepository<Peer, Long> {
+    Peer findByName(String name);
 }

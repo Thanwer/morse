@@ -71,10 +71,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "User= '" + author + '\'' +
-                ", Text='" + text + '\'' +
-                '}';
+        return "Message from "+ author +": "+text;
     }
 
     public long getId() {
