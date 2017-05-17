@@ -22,10 +22,10 @@ public class PiApplication {
         name = scan.next();
 
 		new Thread(new PeerSeeder(name)).start();
-        new Thread(new LocalPeerDiscovery(name)).start();
+        new Thread(new LocalPeerDiscovery()).start();
 
         Timer timer = new Timer();
-        timer.schedule(new LocalPeerDiscoveryClient(), 0, 60000);
+        timer.schedule(new LocalPeerDiscoveryClient(), 0, 6000);
 
 		String s = "";
 		String id;

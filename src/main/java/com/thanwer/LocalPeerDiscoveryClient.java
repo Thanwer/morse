@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.thanwer.PeerUtil.sendPeer;
 
 /**
  * Created by Thanwer on 15/05/2017.
@@ -22,10 +21,14 @@ public class LocalPeerDiscoveryClient extends TimerTask {
 
 
     DatagramSocket c;
-    private List<Peer> peers = new ArrayList<>();
+    private static PeerRepository peerRepository;
+
+    public LocalPeerDiscoveryClient() {}
 
     @Autowired
-    private PeerRepository peerRepository;
+    public LocalPeerDiscoveryClient(PeerRepository peerRepository){
+        LocalPeerDiscoveryClient.peerRepository = peerRepository;
+    }
 
     @Override
     public void run() {
@@ -35,7 +38,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             c = new DatagramSocket();
             c.setBroadcast(true);
 
-            byte[] sendData = "MORSE".getBytes();
+            byte[] sendData = PiApplication.name.getBytes();
 
             //Try the 255.255.255.255 first
             try {
@@ -85,7 +88,8 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             String message = new String(receivePacket.getData()).trim();
             //if (message.equals("MORSE_Response")) {
                 //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
-            sendPeer(new Peer(message, receivePacket.getAddress()));
+            //sendPeer(new Peer(message, receivePacket.getAddress()));
+            peerRepository.save(new Peer(message, receivePacket.getAddress()));
             //}
 
             //Close the port!
