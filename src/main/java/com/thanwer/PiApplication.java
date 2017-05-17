@@ -11,6 +11,7 @@ import java.util.Timer;
 
 @SpringBootApplication
 public class PiApplication {
+    public static String name = "default";
 
 	public static void main(String[] args) throws ResourceAccessException {
 		SpringApplication.run(PiApplication.class, args);
@@ -18,7 +19,7 @@ public class PiApplication {
         //(new Thread(new LocalPeerDiscoveryClient())).start();
         System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
-        String name = scan.next();
+        name = scan.next();
 
 		new Thread(new PeerSeeder(name)).start();
         new Thread(new LocalPeerDiscovery(name)).start();
@@ -28,15 +29,20 @@ public class PiApplication {
 
 		String s = "";
 		String id;
+
 		while (!s.equals("OK")) {
+
             System.out.println("Peer List: ");
             PeerUtil.getPeer();
             System.out.println();
             System.out.println();
 
-			System.out.println("\nName: ");
-			Scanner scan1 = new Scanner(System.in);
-			id = scan1.next();
+            System.out.println("\nName or (R)eload: ");
+            Scanner scan1 = new Scanner(System.in);
+            id = scan1.next();
+
+
+            scan1 = new Scanner(System.in);
 			System.out.println("Text: ");
 			s = scan1.next();
 

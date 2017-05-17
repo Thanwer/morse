@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import com.thanwer.PiApplication;
 
 import java.net.UnknownHostException;
 
@@ -35,8 +36,15 @@ public class MessageUtil {
 
         Peer peer = peerRepository.findByName(id);
         RestTemplate restTemplate = new RestTemplate();
-        String url = "http:/"+peer.getIpLAN()+":8080/messages";
-        Message test = new Message(text);
+        String url = null;
+        try {
+            url = "http:/"+peer.getIpLAN()+":8080/messages";
+        } catch (NullPointerException e) {
+            System.out.println("Peer not found");
+            return;
+        }
+
+        Message test = new Message(PiApplication.name ,text);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
