@@ -1,70 +1,143 @@
 package com.thanwer;
 
-import rice.p2p.commonapi.Application;
-import rice.p2p.commonapi.Endpoint;
-import rice.p2p.commonapi.Id;
-import rice.p2p.commonapi.Message;
-import rice.p2p.commonapi.Node;
+import java.io.IOException;
+import java.net.*;
+import java.util.*;
+
+import rice.environment.Environment;
 import rice.p2p.commonapi.NodeHandle;
-import rice.p2p.commonapi.RouteMessage;
+import rice.pastry.*;
+import rice.pastry.socket.SocketPastryNodeFactory;
+import rice.pastry.standard.RandomNodeIdFactory;
+import rice.pastry.transport.TransportPastryNodeFactory;
 
 /**
- * Created by Thanwer on 17/05/2017.
+ * Created by Thanwer on 18/05/2017.
  */
-public class DHTApp implements Application{
-    protected Endpoint endpoint;
+public class DHTApp {
 
-    public DHTApp(Node node) {
-        // We are only going to use one instance of this application on each PastryNode
-        this.endpoint = node.buildEndpoint(this, "myinstance");
+    /**
+     * this will keep track of our Scribe applications
+     */
+    Vector<DHTClient> apps = new Vector<DHTClient>();
 
-        // the rest of the initialization code could go here
+    /**
+     * Based on the rice.tutorial.lesson4.DistTutorial
+     * <p>
+     * This constructor launches numNodes PastryNodes. They will bootstrap to an
+     * existing ring if one exists at the specified location, otherwise it will
+     * start a new ring.
+     *
+     * @param bindport    the local port to bind to
+     * @param bootaddress the IP:port of the node to boot from
+     * @param numNodes    the number of nodes to create in this JVM
+     * @param env         the Environment
+     */
+    public DHTApp(int bindport, InetSocketAddress bootaddress,
+                  int numNodes, Environment env) throws Exception {
 
-        // now we can receive messages
-        this.endpoint.register();
+        // Generate the NodeIds Randomly
+        NodeIdFactory nidFactory = new RandomNodeIdFactory(env);
+
+        // construct the PastryNodeFactory, this is how we use rice.pastry.socket
+        PastryNodeFactory factory = new SocketPastryNodeFactory(nidFactory, bindport, env);
+
+        // loop to construct the nodes/apps
+        for (int curNode = 0; curNode < numNodes; curNode++) {
+            // construct a new node
+            PastryNode node = factory.newNode();
+
+            // construct a new scribe application
+            DHTClient app = new DHTClient(node);
+            apps.add(app);
+
+            node.boot(bootaddress);
+
+            // the node may require sending several messages to fully boot into the ring
+            synchronized (node) {
+                while (!node.isReady() && !node.joinFailed()) {
+                    // delay so we don't busy-wait
+                    node.wait(500);
+
+                    // abort if can't join
+                    if (node.joinFailed()) {
+                        throw new IOException("Could not join the FreePastry ring.  Reason:" + node.joinFailedReason());
+                    }
+                }
+            }
+
+            System.out.println("Finished creating new node: " + node);
+        }
+
+        // for the first app subscribe then start the publishtask
+        Iterator<DHTClient> i = apps.iterator();
+        DHTClient app = (DHTClient) i.next();
+        app.subscribe();
+        app.startPublishTask();
+        // for all the rest just subscribe
+        while (i.hasNext()) {
+            app = (DHTClient) i.next();
+            app.subscribe();
+        }
+
+        // now, print the tree
+        env.getTimeSource().sleep(5000);
+        printTree(apps);
     }
 
     /**
-     * Called to route a message to the id
+     * Note that this function only works because we have global knowledge. Doing
+     * this in an actual distributed environment will take some more work.
+     *
+     * @param apps Vector of the applicatoins.
      */
-    public void routeDHTMsg(Id id) {
-        System.out.println(this+" sending to "+id);
-        Message msg = new DHTMsg(endpoint.getId(), id);
-        endpoint.route(id, msg, null);
+    public static void printTree(Vector<DHTClient> apps) {
+        // build a hashtable of the apps, keyed by nodehandle
+        Hashtable<NodeHandle, DHTClient> appTable = new Hashtable<NodeHandle, DHTClient>();
+        Iterator<DHTClient> i = apps.iterator();
+        while (i.hasNext()) {
+            DHTClient app = (DHTClient) i.next();
+            appTable.put(app.endpoint.getLocalNodeHandle(), app);
+        }
+        NodeHandle seed = ((DHTClient) apps.get(0)).endpoint
+                .getLocalNodeHandle();
+
+        // get the root
+        NodeHandle root = getRoot(seed, appTable);
+
+        // print the tree from the root down
+        recursivelyPrintChildren(root, 0, appTable);
     }
 
     /**
-     * Called to directly send a message to the nh
+     * Recursively crawl up the tree to find the root.
      */
-    public void routeDHTMsgDirect(NodeHandle nh) {
-        System.out.println(this+" sending direct to "+nh);
-        Message msg = new DHTMsg(endpoint.getId(), nh.getId());
-        endpoint.route(null, msg, nh);
+    public static NodeHandle getRoot(NodeHandle seed, Hashtable<NodeHandle, DHTClient> appTable) {
+        DHTClient app = (DHTClient) appTable.get(seed);
+        if (app.isRoot())
+            return seed;
+        NodeHandle nextSeed = app.getParent();
+        return getRoot(nextSeed, appTable);
     }
 
     /**
-     * Called when we receive a message.
+     * Print's self, then children.
      */
-    public void deliver(Id id, Message message) {
-        System.out.println(this+" received "+message);
-    }
+    public static void recursivelyPrintChildren(NodeHandle curNode,
+                                                int recursionDepth, Hashtable<NodeHandle, DHTClient> appTable) {
+        // print self at appropriate tab level
+        String s = "";
+        for (int numTabs = 0; numTabs < recursionDepth; numTabs++) {
+            s += "  ";
+        }
+        s += curNode.getId().toString();
+        System.out.println(s);
 
-    /**
-     * Called when you hear about a new neighbor.
-     * Don't worry about this method for now.
-     */
-    public void update(NodeHandle handle, boolean joined) {
-    }
-
-    /**
-     * Called a message travels along your path.
-     * Don't worry about this method for now.
-     */
-    public boolean forward(RouteMessage message) {
-        return true;
-    }
-
-    public String toString() {
-        return "DHTApp "+endpoint.getId();
+        // recursively print all children
+        DHTClient app = (DHTClient) appTable.get(curNode);
+        NodeHandle[] children = app.getChildren();
+        for (int curChild = 0; curChild < children.length; curChild++) {
+            recursivelyPrintChildren(children[curChild], recursionDepth + 1, appTable);
+        }
     }
 }

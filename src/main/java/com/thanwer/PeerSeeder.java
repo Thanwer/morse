@@ -61,11 +61,7 @@ public class PeerSeeder implements Runnable{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        try {
-            sendPeer(new Peer(name, ipLAN));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        sendPeer(new Peer(name, ipLAN));
 
     }
 }

@@ -20,7 +20,7 @@ public class PeerUtil {
         PeerUtil.peerRepository = peerRepository;
     }
 
-    public static void sendPeer (Peer peer) throws JsonProcessingException,ResourceAccessException {
+    public static void sendPeer (Peer peer) {
         peerRepository.save(peer);
     }
 

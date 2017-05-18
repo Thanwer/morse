@@ -28,29 +28,29 @@ public class PiApplication {
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(PiApplication.class, args);
 
+
         Environment env = new Environment();
 
         // disable the UPnP setting (in case you are testing this on a NATted LAN)
         env.getParameters().setString("nat_search_policy","never");
+        // the port to use locally
+        int bindport = 9001;
 
-        try {
-            // the port to use locally
-            int bindport = Integer.parseInt("9001");
+        // build the bootaddress from the command line args
+        //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
+        InetAddress addr = null;
+        addr = InetAddress.getLocalHost();
+        InetAddress bootaddr = InetAddress.getByName(addr.getHostAddress());
+        int bootport = 9001;
+        InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
-            // build the bootaddress from the command line args
-            InetAddress bootaddr = InetAddress.getByName("10.88.0.18");
-            int bootport = Integer.parseInt("9001");
-            InetSocketAddress bootaddress = new InetSocketAddress(bootaddr,bootport);
+        // the port to use locally
+        int numNodes = 10;
 
-            // launch our node!
-            DHTNode dt = new DHTNode(bindport, bootaddress, env);
-        } catch (Exception e) {
-            // remind user how to use
-            System.out.println("Usage:");
-            System.out.println("java [-cp FreePastry-<version>.jar] rice.tutorial.lesson3.DHTNode localbindport bootIP bootPort");
-            System.out.println("example java rice.tutorial.DHTNode 9001 pokey.cs.almamater.edu 9001");
-            throw e;
-        }
+        // launch our node!
+        DHTApp dt = new DHTApp(bindport, bootaddress, numNodes,env);
+
+    }
 
 		/*
 
@@ -95,7 +95,4 @@ public class PiApplication {
         }
 		System.exit (0);
 		*/
-	}
-
-
 }
