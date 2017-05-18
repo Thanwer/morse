@@ -1,3 +1,5 @@
-# pi
+# Morse
 
-Just a repository for academic purposes.
+A P2P-based chat application.
+
+WIP.
