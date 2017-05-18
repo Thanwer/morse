@@ -1,6 +1,7 @@
 package com.thanwer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 /**
  * Created by Thanwer on 15/05/2017.
  */
+@Service
 public class LocalPeerDiscovery implements Runnable {
 
     DatagramSocket socket;
@@ -41,12 +43,16 @@ public class LocalPeerDiscovery implements Runnable {
                 socket.receive(packet);
 
                 //Packet received
-                System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
+                //System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
                 //System.out.println(getClass().getName() + ">>>Packet received; data: " + new String(packet.getData()));
 
                 //See if the packet holds the right command (message)
                 String message = new String(packet.getData()).trim();
-                peerRepository.save(new Peer(message, packet.getAddress()));
+                try {
+                    peerRepository.save(new Peer(message, packet.getAddress()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 //if (message.equals("MORSE")) {
                     //byte[] sendData = name.getBytes();
 

@@ -4,7 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.ResourceAccessException;
+import rice.environment.Environment;
+import rice.p2p.commonapi.Id;
+import rice.p2p.commonapi.NodeHandleSet;
+import rice.pastry.NodeHandle;
+import rice.pastry.NodeIdFactory;
+import rice.pastry.PastryNode;
+import rice.pastry.PastryNodeFactory;
+import rice.pastry.leafset.LeafSet;
+import rice.pastry.socket.SocketPastryNodeFactory;
+import rice.pastry.standard.RandomNodeIdFactory;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.Scanner;
 import java.util.Timer;
 
@@ -13,10 +25,35 @@ import java.util.Timer;
 public class PiApplication {
     public static String name = "default";
 
-	public static void main(String[] args) throws ResourceAccessException {
+	public static void main(String[] args) throws Exception {
 		SpringApplication.run(PiApplication.class, args);
 
-        //(new Thread(new LocalPeerDiscoveryClient())).start();
+        Environment env = new Environment();
+
+        // disable the UPnP setting (in case you are testing this on a NATted LAN)
+        env.getParameters().setString("nat_search_policy","never");
+
+        try {
+            // the port to use locally
+            int bindport = Integer.parseInt("9001");
+
+            // build the bootaddress from the command line args
+            InetAddress bootaddr = InetAddress.getByName("10.88.0.18");
+            int bootport = Integer.parseInt("9001");
+            InetSocketAddress bootaddress = new InetSocketAddress(bootaddr,bootport);
+
+            // launch our node!
+            DHTNode dt = new DHTNode(bindport, bootaddress, env);
+        } catch (Exception e) {
+            // remind user how to use
+            System.out.println("Usage:");
+            System.out.println("java [-cp FreePastry-<version>.jar] rice.tutorial.lesson3.DHTNode localbindport bootIP bootPort");
+            System.out.println("example java rice.tutorial.DHTNode 9001 pokey.cs.almamater.edu 9001");
+            throw e;
+        }
+
+		/*
+
         System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
         name = scan.next();
@@ -57,6 +94,7 @@ public class PiApplication {
 
         }
 		System.exit (0);
+		*/
 	}
 
 
