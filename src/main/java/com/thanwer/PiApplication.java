@@ -39,8 +39,9 @@ public class PiApplication {
         // build the bootaddress from the command line args
         //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
         InetAddress addr = null;
-        addr = InetAddress.getLocalHost();
+        addr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
         InetAddress bootaddr = InetAddress.getByName(addr.getHostAddress());
+        System.out.println(bootaddr);
         int bootport = 9001;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
