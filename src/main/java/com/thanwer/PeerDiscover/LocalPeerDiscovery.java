@@ -1,5 +1,7 @@
-package com.thanwer;
+package com.thanwer.PeerDiscover;
 
+import com.thanwer.Peer;
+import com.thanwer.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

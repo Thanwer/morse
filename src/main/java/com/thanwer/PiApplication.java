@@ -1,24 +1,14 @@
 package com.thanwer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thanwer.PeerDiscover.DHTPDApp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.client.ResourceAccessException;
 import rice.environment.Environment;
-import rice.p2p.commonapi.Id;
-import rice.p2p.commonapi.NodeHandleSet;
-import rice.pastry.NodeHandle;
-import rice.pastry.NodeIdFactory;
-import rice.pastry.PastryNode;
-import rice.pastry.PastryNodeFactory;
-import rice.pastry.leafset.LeafSet;
-import rice.pastry.socket.SocketPastryNodeFactory;
-import rice.pastry.standard.RandomNodeIdFactory;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.Scanner;
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 @SpringBootApplication
@@ -30,26 +20,20 @@ public class PiApplication {
 
 
         Environment env = new Environment();
-
-        // disable the UPnP setting (in case you are testing this on a NATted LAN)
-        env.getParameters().setString("nat_search_policy","never");
-        // the port to use locally
         int bindport = 9001;
+        env.getParameters().setString("nat_search_policy","always");
+
 
         // build the bootaddress from the command line args
-        //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
         InetAddress addr = null;
-        addr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
-        InetAddress bootaddr = InetAddress.getByName(addr.getHostAddress());
-        System.out.println(bootaddr);
+        //InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
+        InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
         int bootport = 9001;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
-        // the port to use locally
-        int numNodes = 10;
 
         // launch our node!
-        DHTApp dt = new DHTApp(bindport, bootaddress, numNodes,env);
+        DHTPDApp dt = new DHTPDApp(bindport, bootaddress, env);
 
     }
 

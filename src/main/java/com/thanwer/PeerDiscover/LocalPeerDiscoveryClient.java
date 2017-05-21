@@ -1,13 +1,14 @@
-package com.thanwer;
+package com.thanwer.PeerDiscover;
 
+import com.thanwer.Peer;
+import com.thanwer.PeerRepository;
+import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;

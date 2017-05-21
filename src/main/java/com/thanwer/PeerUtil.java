@@ -5,7 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  * Created by Thanwer on 15/05/2017.
@@ -29,4 +37,23 @@ public class PeerUtil {
         for (Peer peer : peerList)
                 System.out.println(peer.toString());
     }
+
+    public static InetAddress getLanIP() throws UnknownHostException {
+        InetAddress addr = InetAddress.getLocalHost();
+        return InetAddress.getByName(addr.getHostAddress());
+    }
+
+    public static  InetAddress getWanIP() throws IOException {
+        URL whatismyip = new URL("http://checkip.amazonaws.com");
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new InputStreamReader(
+                    whatismyip.openStream()));
+        } catch (IOException e) {
+            System.err.println("Get WAN Address... Timeout...");
+        }
+        return InetAddress.getByName(in.readLine());
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.thanwer;
+package com.thanwer.PeerDiscover;
 
 import rice.p2p.commonapi.NodeHandle;
 import rice.p2p.scribe.ScribeContent;
@@ -6,7 +6,7 @@ import rice.p2p.scribe.ScribeContent;
 /**
  * Created by Thanwer on 18/05/2017.
  */
-public class DHTAnnounce implements ScribeContent {
+public class DHTPDAnnounce implements ScribeContent {
     /**
      * The source of this content.
      */
@@ -24,11 +24,11 @@ public class DHTAnnounce implements ScribeContent {
      * @param from Who sent the message.
      * @param seq the sequence number of this content.
      */
-    public DHTAnnounce(NodeHandle from, int seq) {
+    public DHTPDAnnounce(NodeHandle from, int seq) {
         this.from = from;
         this.seq = seq;
     }
     public String toString() {
-        return "DHTAnnounce #"+seq+" from "+from;
+        return "DHTPDAnnounce #"+seq+" from "+from;
     }
 }

@@ -1,4 +1,4 @@
-package com.thanwer;
+package com.thanwer.PeerDiscover;
 
 /**
  * Created by Thanwer on 18/05/2017.
@@ -25,53 +25,24 @@ import rice.pastry.commonapi.PastryIdFactory;
  *
  * @author Jeff Hoye
  */
-public class DHTClient implements ScribeClient, Application {
+public class DHTPDClient implements ScribeClient, Application {
 
-    /**
-     * The message sequence number.  Will be incremented after each send.
-     */
+
     int seqNum = 0;
-
-    /**
-     * This task kicks off publishing and anycasting.
-     * We hold it around in case we ever want to cancel the publishTask.
-     */
     CancellableTask publishTask;
-
-    /**
-     * My handle to a scribe impl.
-     */
     Scribe myScribe;
-
-    /**
-     * The only topic this appl is subscribing to.
-     */
     Topic DiscoverTopic;
-
-    /**
-     * The Endpoint represents the underlieing node.  By making calls on the
-     * Endpoint, it assures that the message will be delivered to a MyApp on whichever
-     * node the message is intended for.
-     */
     protected Endpoint endpoint;
 
-    /**
-     * The constructor for this scribe client.  It will construct the ScribeApplication.
-     *
-     * @param node the PastryNode
-     */
-    public DHTClient(Node node) {
-        // you should recognize this from lesson 3
-        this.endpoint = node.buildEndpoint(this, "myinstance");
+    public DHTPDClient(Node node) {
+        this.endpoint = node.buildEndpoint(this, "PeerDiscover");
 
         // construct Scribe
-        myScribe = new ScribeImpl(node,"myScribeInstance");
+        myScribe = new ScribeImpl(node,"PeerDiscover");
 
         // construct the topic
-        DiscoverTopic = new Topic(new PastryIdFactory(node.getEnvironment()), "example topic");
-        System.out.println("DiscoverTopic = "+DiscoverTopic);
-
-        // now we can receive messages
+        DiscoverTopic = new Topic(new PastryIdFactory(node.getEnvironment()), "PeerDiscoverTopic");
+        // Start!!
         endpoint.register();
     }
 
@@ -86,7 +57,7 @@ public class DHTClient implements ScribeClient, Application {
      * Starts the publish task.
      */
     public void startPublishTask() {
-        publishTask = endpoint.scheduleMessage(new PublishContent(), 5000, 5000);
+        publishTask = endpoint.scheduleMessage(new PublishContent(), 6000, 6000);
     }
 
 
@@ -105,7 +76,7 @@ public class DHTClient implements ScribeClient, Application {
      */
     public void sendMulticast() {
         System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+seqNum);
-        DHTAnnounce myMessage = new DHTAnnounce(endpoint.getLocalNodeHandle(), seqNum);
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), seqNum);
         myScribe.publish(DiscoverTopic, myMessage);
         seqNum++;
     }
@@ -114,8 +85,8 @@ public class DHTClient implements ScribeClient, Application {
      * Called whenever we receive a published message.
      */
     public void deliver(Topic topic, ScribeContent content) {
-        System.out.println("DHTClient.deliver("+topic+","+content+")");
-        /*if (((DHTAnnounce)content).from == null) {
+        System.out.println("DHTPDClient.deliver("+topic+","+content+")");
+        /*if (((DHTPDAnnounce)content).from == null) {
             new Exception("Stack Trace").printStackTrace();
         }*/
     }
@@ -125,7 +96,7 @@ public class DHTClient implements ScribeClient, Application {
      */
     public void sendAnycast() {
         System.out.println("Node "+endpoint.getLocalNodeHandle()+" anycasting "+seqNum);
-        DHTAnnounce myMessage = new DHTAnnounce(endpoint.getLocalNodeHandle(), seqNum);
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), seqNum);
         myScribe.anycast(DiscoverTopic, myMessage);
         seqNum++;
     }
@@ -137,20 +108,20 @@ public class DHTClient implements ScribeClient, Application {
      */
     public boolean anycast(Topic topic, ScribeContent content) {
         boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0;
-        System.out.println("DHTClient.anycast("+topic+","+content+"):"+returnValue);
+        System.out.println("DHTPDClient.anycast("+topic+","+content+"):"+returnValue);
         return returnValue;
     }
 
     public void childAdded(Topic topic, NodeHandle child) {
-//    System.out.println("DHTClient.childAdded("+topic+","+child+")");
+//    System.out.println("DHTPDClient.childAdded("+topic+","+child+")");
     }
 
     public void childRemoved(Topic topic, NodeHandle child) {
-//    System.out.println("DHTClient.childRemoved("+topic+","+child+")");
+//    System.out.println("DHTPDClient.childRemoved("+topic+","+child+")");
     }
 
     public void subscribeFailed(Topic topic) {
-//    System.out.println("DHTClient.childFailed("+topic+")");
+//    System.out.println("DHTPDClient.childFailed("+topic+")");
     }
 
     public boolean forward(RouteMessage message) {
