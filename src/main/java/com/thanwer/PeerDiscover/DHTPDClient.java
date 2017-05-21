@@ -4,6 +4,12 @@ package com.thanwer.PeerDiscover;
  * Created by Thanwer on 18/05/2017.
  */
 
+import com.thanwer.Peer;
+import com.thanwer.PeerRepository;
+import com.thanwer.PeerUtil;
+import com.thanwer.PiApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rice.p2p.commonapi.*;
 import rice.p2p.commonapi.Application;
 import rice.p2p.commonapi.CancellableTask;
@@ -19,14 +25,26 @@ import rice.p2p.scribe.ScribeImpl;
 import rice.p2p.scribe.Topic;
 import rice.pastry.commonapi.PastryIdFactory;
 
+import java.net.UnknownHostException;
+
 /**
  * We implement the Application interface to receive regular timed messages (see lesson5).
  * We implement the ScribeClient interface to receive scribe messages (called ScribeContent).
  *
  * @author Jeff Hoye
  */
+@Service
 public class DHTPDClient implements ScribeClient, Application {
 
+
+    private static PeerRepository peerRepository;
+
+    public DHTPDClient() { }
+
+    @Autowired
+    public DHTPDClient(PeerRepository peerRepository){
+        DHTPDClient.peerRepository = peerRepository;
+    }
 
     int seqNum = 0;
     CancellableTask publishTask;
@@ -57,7 +75,7 @@ public class DHTPDClient implements ScribeClient, Application {
      * Starts the publish task.
      */
     public void startPublishTask() {
-        publishTask = endpoint.scheduleMessage(new PublishContent(), 6000, 6000);
+        publishTask = endpoint.scheduleMessage(new PublishContent(), 60000, 60000);
     }
 
 
@@ -66,39 +84,35 @@ public class DHTPDClient implements ScribeClient, Application {
      */
     public void deliver(Id id, Message message) {
         if (message instanceof PublishContent) {
-            sendMulticast();
-            sendAnycast();
+            try {
+                sendMulticast();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * Sends the multicast message.
      */
-    public void sendMulticast() {
-        System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+seqNum);
-        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), seqNum);
+    public void sendMulticast() throws UnknownHostException {
+        //System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+PiApplication.name);
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), PiApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
-        seqNum++;
     }
 
     /**
      * Called whenever we receive a published message.
      */
     public void deliver(Topic topic, ScribeContent content) {
-        System.out.println("DHTPDClient.deliver("+topic+","+content+")");
-        /*if (((DHTPDAnnounce)content).from == null) {
-            new Exception("Stack Trace").printStackTrace();
-        }*/
-    }
 
-    /**
-     * Sends an anycast message.
-     */
-    public void sendAnycast() {
-        System.out.println("Node "+endpoint.getLocalNodeHandle()+" anycasting "+seqNum);
-        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), seqNum);
-        myScribe.anycast(DiscoverTopic, myMessage);
-        seqNum++;
+        //System.out.println("DHTPDClient.deliver(" + topic + "," + content + ")");
+        DHTPDAnnounce p = (DHTPDAnnounce) content;
+        if (peerRepository.existsByName(p.getName())) {
+            return;
+        } else {
+            peerRepository.save(new Peer(p.getName(), p.getIpLan()));
+        }
     }
 
     /**

@@ -20,34 +20,6 @@ public class PeerSeeder implements Runnable{
         this.name=name;
     }
 
-    /*@Autowired
-    public PeerSeeder(PeerRepository peerRepository){
-        this.peerRepository = peerRepository;
-    }
-
-    @Override
-    public void run(String... strings) throws Exception{
-        List<Peer> peers = new ArrayList<>();
-
-        URL whatismyip = new URL("http://checkip.amazonaws.com");
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(
-                    whatismyip.openStream()));
-        } catch (IOException e) {
-            System.err.println("Get WAN Address... Timeout...");
-        }
-        ipWAN = InetAddress.getByName(in.readLine());
-
-        InetAddress addr = InetAddress.getLocalHost();
-        ipLAN = InetAddress.getByName(addr.getHostAddress());
-
-
-        peers.add(new Peer("local", ipLAN));
-
-        peerRepository.save(peers);
-    }*/
-
     @Override
     public void run() {
         InetAddress addr = null;

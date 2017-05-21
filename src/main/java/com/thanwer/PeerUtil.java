@@ -1,11 +1,15 @@
 package com.thanwer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
+
+/*
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.client.ResourceAccessException;
-
-
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.UnknownHostException;
@@ -14,7 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-
+*/
 /**
  * Created by Thanwer on 15/05/2017.
  */
@@ -42,7 +46,7 @@ public class PeerUtil {
         InetAddress addr = InetAddress.getLocalHost();
         return InetAddress.getByName(addr.getHostAddress());
     }
-
+    /*
     public static  InetAddress getWanIP() throws IOException {
         URL whatismyip = new URL("http://checkip.amazonaws.com");
         BufferedReader in = null;
@@ -53,7 +57,7 @@ public class PeerUtil {
             System.err.println("Get WAN Address... Timeout...");
         }
         return InetAddress.getByName(in.readLine());
-    }
+    }*/
 
 
 }

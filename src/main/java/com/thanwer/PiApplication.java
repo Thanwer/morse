@@ -1,58 +1,60 @@
 package com.thanwer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thanwer.PeerDiscover.DHTPDApp;
+import com.thanwer.PeerDiscover.LocalPeerDiscovery;
+import com.thanwer.PeerDiscover.LocalPeerDiscoveryClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.client.ResourceAccessException;
 import rice.environment.Environment;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Scanner;
+import java.util.Timer;
 
 
 @SpringBootApplication
 public class PiApplication {
     public static String name = "default";
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(PiApplication.class, args);
+    public static void main(String[] args) throws Exception {
+        SpringApplication.run(PiApplication.class, args);
 
 
         Environment env = new Environment();
-        int bindport = 9001;
-        env.getParameters().setString("nat_search_policy","always");
+        int bindport = 8081;
 
 
-        // build the bootaddress from the command line args
+        // build the bootaddress
         InetAddress addr = null;
-        //InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
-        InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
-        int bootport = 9001;
+        InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
+        //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
+        //InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
+        int bootport = 8081;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
 
         // launch our node!
-        DHTPDApp dt = new DHTPDApp(bindport, bootaddress, env);
+        //DHTPDApp dt = new DHTPDApp(bindport, bootaddress, env);
 
-    }
-
-		/*
 
         System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
         name = scan.next();
 
-		new Thread(new PeerSeeder(name)).start();
+        new Thread(new DHTPDApp(bindport, bootaddress, env)).start();
+        new Thread(new PeerSeeder(name)).start();
         new Thread(new LocalPeerDiscovery()).start();
 
         Timer timer = new Timer();
-        timer.schedule(new LocalPeerDiscoveryClient(), 0, 6000);
+        timer.schedule(new LocalPeerDiscoveryClient(), 0, 60000);
 
-		String s = "";
-		String id;
+        String s = "";
+        String id;
 
-		while (!s.equals("OK")) {
+        while (!s.equals("OK")) {
 
             System.out.println("Peer List: ");
             PeerUtil.getPeer();
@@ -65,11 +67,11 @@ public class PiApplication {
 
 
             scan1 = new Scanner(System.in);
-			System.out.println("Text: ");
-			s = scan1.next();
+            System.out.println("Text: ");
+            s = scan1.next();
 
             try {
-                MessageUtil.sendMessage(id,s);
+                MessageUtil.sendMessage(id, s);
             } catch (ResourceAccessException e) {
                 System.out.println("Host not found.");
             } catch (JsonProcessingException e) {
@@ -78,6 +80,6 @@ public class PiApplication {
             }
 
         }
-		System.exit (0);
-		*/
+        System.exit(0);
+    }
 }

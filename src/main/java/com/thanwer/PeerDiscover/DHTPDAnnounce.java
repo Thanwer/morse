@@ -3,32 +3,34 @@ package com.thanwer.PeerDiscover;
 import rice.p2p.commonapi.NodeHandle;
 import rice.p2p.scribe.ScribeContent;
 
+import java.net.InetAddress;
+
 /**
  * Created by Thanwer on 18/05/2017.
  */
 public class DHTPDAnnounce implements ScribeContent {
-    /**
-     * The source of this content.
-     */
+    private final String name;
     NodeHandle from;
+    InetAddress ipLan;
 
-    /**
-     * The sequence number of the content.
-     */
-    int seq;
-
-    /**
-     * Simple constructor.  Typically, you would also like some
-     * interesting payload for your application.
-     *
-     * @param from Who sent the message.
-     * @param seq the sequence number of this content.
-     */
-    public DHTPDAnnounce(NodeHandle from, int seq) {
+    public DHTPDAnnounce(NodeHandle from, String name, InetAddress ipLan) {
         this.from = from;
-        this.seq = seq;
+        this.name = name;
+        this.ipLan = ipLan;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public NodeHandle getFrom() {
+        return from;
+    }
+
+    public InetAddress getIpLan() {
+        return ipLan;
+    }
+
     public String toString() {
-        return "DHTPDAnnounce #"+seq+" from "+from;
-    }
+        return "DHTPDAnnounce #"+name+" from "+from+"IP: "+ipLan;}
 }

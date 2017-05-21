@@ -43,7 +43,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
 
             //Try the 255.255.255.255 first
             try {
-                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"), 8888);
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"), 8088);
                 c.send(sendPacket);
                 //System.out.println(getClass().getName() + ">>> Request packet sent to: 255.255.255.255 (DEFAULT)");
             } catch (Exception e) {
@@ -63,33 +63,20 @@ public class LocalPeerDiscoveryClient extends TimerTask {
                     if (broadcast == null) {
                         continue;
                     }
-
                     // Send the broadcast package!
-                    try {
-                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, broadcast, 8888);
-                        c.send(sendPacket);
-                    } catch (Exception e) {
-                    }
+                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, broadcast, 8088);
+                    c.send(sendPacket);
 
-                    //System.out.println(getClass().getName() + ">>> Request packet sent to: " + broadcast.getHostAddress() + "; Interface: " + networkInterface.getDisplayName());
+
                 }
             }
-
-            //System.out.println(getClass().getName() + ">>> Done looping over all network interfaces. Now waiting for a reply!");
 
             //Wait for a response
             byte[] recvBuf = new byte[15000];
             DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
             c.receive(receivePacket);
 
-            //We have a response
-            //System.out.println(getClass().getName() + ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
-
-            //Check if the message is correct
             String message = new String(receivePacket.getData()).trim();
-            //if (message.equals("MORSE_Response")) {
-                //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
-            //sendPeer(new Peer(message, receivePacket.getAddress()));
             peerRepository.save(new Peer(message, receivePacket.getAddress()));
             //}
 
