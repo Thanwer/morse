@@ -1,5 +1,7 @@
 package com.thanwer;
 
+import rice.pastry.NodeHandle;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,10 +14,14 @@ import java.util.Date;
  */
 
 @Entity
-public class Message {
+public class Message implements rice.p2p.commonapi.Message{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+
+    private NodeHandle nh;
+
+
 
     private String author;
     private Date createDate;
@@ -31,6 +37,12 @@ public class Message {
     public Message(String author, String text) {
         this.author = author;
         this.createDate = Date.from(Instant.now());
+        this.text = text;
+    }
+
+    public Message(NodeHandle nh, String author, String text) {
+        this.nh = nh;
+        this.author = author;
         this.text = text;
     }
 
@@ -64,6 +76,9 @@ public class Message {
         this.createDate = createDate;
     }
 
+    public NodeHandle getNh() { return nh; }
+
+    public void setNh(NodeHandle nh) { this.nh = nh; }
     @Override
     public String toString() {
         return "Message from "+ author +": "+text;
@@ -71,5 +86,10 @@ public class Message {
 
     public long getId() {
         return id;
+    }
+
+    @Override
+    public int getPriority() {
+        return Message.LOW_PRIORITY;
     }
 }

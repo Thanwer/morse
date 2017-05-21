@@ -59,15 +59,18 @@ public class LocalPeerDiscoveryClient extends TimerTask {
                 }
 
                 for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
-                    InetAddress broadcast = interfaceAddress.getBroadcast();
-                    if (broadcast == null) {
+                    //Skip Loopback
+                    if (interfaceAddress.getAddress().isLoopbackAddress()) {
                         continue;
+                    } else {
+                        InetAddress broadcast = interfaceAddress.getBroadcast();
+                        if (broadcast == null) {
+                            continue;
+                        }
+                        // Send the broadcast package!
+                        DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, broadcast, 8088);
+                        c.send(sendPacket);
                     }
-                    // Send the broadcast package!
-                    DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, broadcast, 8088);
-                    c.send(sendPacket);
-
-
                 }
             }
 

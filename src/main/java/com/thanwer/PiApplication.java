@@ -28,17 +28,11 @@ public class PiApplication {
 
 
         // build the bootaddress
-        InetAddress addr = null;
         InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
         //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
         //InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
         int bootport = 8081;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
-
-
-        // launch our node!
-        //DHTPDApp dt = new DHTPDApp(bindport, bootaddress, env);
-
 
         System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
@@ -71,7 +65,7 @@ public class PiApplication {
             s = scan1.next();
 
             try {
-                MessageUtil.sendMessage(id, s);
+                MessageUtil.sendMessage(null, null, id, s);
             } catch (ResourceAccessException e) {
                 System.out.println("Host not found.");
             } catch (JsonProcessingException e) {

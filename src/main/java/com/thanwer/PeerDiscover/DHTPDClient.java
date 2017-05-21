@@ -75,7 +75,7 @@ public class DHTPDClient implements ScribeClient, Application {
      * Starts the publish task.
      */
     public void startPublishTask() {
-        publishTask = endpoint.scheduleMessage(new PublishContent(), 60000, 60000);
+        publishTask = endpoint.scheduleMessage(new PublishContent(), 1000, 60000);
     }
 
 
