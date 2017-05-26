@@ -20,9 +20,6 @@ public class Message implements rice.p2p.commonapi.Message{
     private long id;
 
     private NodeHandle nh;
-
-
-
     private String author;
     private Date createDate;
     private String text;

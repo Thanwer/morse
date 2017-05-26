@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.ResourceAccessException;
 import rice.environment.Environment;
-import rice.pastry.NodeHandle;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,7 +16,7 @@ import java.util.Timer;
 @SpringBootApplication
 public class PiApplication {
     public static String name = "default";
-    public static String bootIP="10.88.0.229";
+    static String bootIP="10.88.0.229";
     //public static String bootIP="174.138.48.96";
 
     public static void main(String[] args) throws Exception {

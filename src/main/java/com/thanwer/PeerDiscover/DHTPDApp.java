@@ -12,9 +12,9 @@ import rice.pastry.standard.RandomNodeIdFactory;
  * Created by Thanwer on 18/05/2017.
  */
 public class DHTPDApp implements Runnable{
-    int bindport;
-    InetSocketAddress bootaddress;
-    Environment env;
+    private int bindport;
+    private InetSocketAddress bootaddress;
+    private Environment env;
 
     public DHTPDApp(int bindport, InetSocketAddress bootaddress, Environment env) {
         this.bindport = bindport;
@@ -49,16 +49,10 @@ public class DHTPDApp implements Runnable{
                 }
 
                 // abort if can't join
-                if (node.joinFailed()) {
-                    try {
-                        throw new IOException("Could not join the FreePastry ring.  Reason:" + node.joinFailedReason());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                System.out.println("DHT OFF! ");
             }
 
-            System.out.println("DHT OK! " + node);
+            System.out.println("DHT OK! ");
         }
         app.subscribe();
         app.startPublishTask();
@@ -68,6 +62,5 @@ public class DHTPDApp implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //printTree(apps);
     }
 }

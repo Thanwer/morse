@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 @Service
 public class LocalPeerDiscovery implements Runnable {
 
-    DatagramSocket socket;
+    private DatagramSocket socket;
 
     private static PeerRepository peerRepository;
 
@@ -44,7 +44,10 @@ public class LocalPeerDiscovery implements Runnable {
 
                 String message = new String(packet.getData()).trim();
                 try {
-                    peerRepository.save(new Peer(message, packet.getAddress()));
+                    Peer peer = new Peer(message, packet.getAddress());
+                    if (!peerRepository.existsByName(peer.getName())){
+                        peerRepository.save(peer);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

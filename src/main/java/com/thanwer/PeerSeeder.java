@@ -16,12 +16,9 @@ import static com.thanwer.PeerUtil.sendPeer;
  */
 
 public class PeerSeeder implements Runnable {
-    //private PeerRepository peerRepository;
-    //private InetAddress ipWAN;
-    private InetAddress ipLAN;
     private String name;
 
-    public PeerSeeder(String name) {
+    PeerSeeder(String name) {
         this.name = name;
     }
 
@@ -33,27 +30,11 @@ public class PeerSeeder implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ipLAN=socket.getLocalAddress();
+        InetAddress ipLAN = socket.getLocalAddress();
         try {
             sendPeer(new Peer(name, ipLAN));
         } catch (DataIntegrityViolationException e) {
 
         }
     }
-        /*
-        InetAddress addr = null;
-        try {
-            addr = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            ipLAN = InetAddress.getByName(addr.getHostAddress());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        sendPeer(new Peer(name, ipLAN));
-
-    }*/
 }

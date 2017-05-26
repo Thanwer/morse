@@ -13,19 +13,9 @@ import java.net.InetAddress;
 @Entity
 public class Peer {
 
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE)
-    //private long id;
-
-
-
-    private String name;
-    //private InetAddress ipWAN;
     @Id
     private InetAddress ipLAN;
-
-    //private int port;
-
+    private String name;
     public Peer() {}
 
     public Peer(String name, InetAddress ipLAN) {
@@ -38,26 +28,11 @@ public class Peer {
         this.ipLAN = ipLAN;
     }
 
-    /*public Peer(String name, InetAddress ipWAN, InetAddress ipLAN, int port) {
-        this.name = name;
-        this.ipWAN = ipWAN;
-        this.ipLAN = ipLAN;
-        this.port = port;
-    }*/
-
     public String getName() {
         return name;
     }
 
     public InetAddress getIpLAN() { return ipLAN; }
-
-    /*public InetAddress getIpWAN() {
-        return ipWAN;
-    }*/
-
-    /*public int getPort() {
-        return port;
-    }*/
 
     public InetAddress getId() {
         return ipLAN;
@@ -67,6 +42,5 @@ public class Peer {
     public String toString() {
         return "Name=" + name + " IP=" + ipLAN;
     }
-
 
 }

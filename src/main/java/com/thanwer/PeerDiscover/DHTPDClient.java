@@ -29,12 +29,6 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * We implement the Application interface to receive regular timed messages (see lesson5).
- * We implement the ScribeClient interface to receive scribe messages (called ScribeContent).
- *
- * @author Jeff Hoye
- */
 @Service
 public class DHTPDClient implements ScribeClient, Application {
 
@@ -49,42 +43,27 @@ public class DHTPDClient implements ScribeClient, Application {
     }
 
     int seqNum = 0;
-    CancellableTask publishTask;
-    Scribe myScribe;
-    Topic DiscoverTopic;
+    private Scribe myScribe;
+    private Topic DiscoverTopic;
 
-    protected Endpoint endpoint;
+    private Endpoint endpoint;
 
-    public DHTPDClient(Node node) {
+    DHTPDClient(Node node) {
         this.endpoint = node.buildEndpoint(this, "PeerDiscover");
-
-        // construct Scribe
         myScribe = new ScribeImpl(node,"PeerDiscover");
-
-        // construct the topic
         DiscoverTopic = new Topic(new PastryIdFactory(node.getEnvironment()), "PeerDiscoverTopic");
-        // Start!!
         endpoint.register();
     }
 
-    /**
-     * Subscribes to DiscoverTopic.
-     */
     public void subscribe() {
         myScribe.subscribe(DiscoverTopic, this);
     }
 
-    /**
-     * Starts the publish task.
-     */
-    public void startPublishTask() {
-        publishTask = endpoint.scheduleMessage(new PublishContent(), 1000, 60000);
+    void startPublishTask() {
+        CancellableTask publishTask = endpoint.scheduleMessage(new PublishContent(), 1000, 60000);
     }
 
 
-    /**
-     * Part of the Application interface.  Will receive PublishContent every so often.
-     */
     public void deliver(Id id, Message message) {
         if (message instanceof PublishContent) {
             try {
@@ -93,23 +72,14 @@ public class DHTPDClient implements ScribeClient, Application {
                 e.printStackTrace();
             }
         }
-        }
+    }
 
-
-    /**
-     * Sends the multicast message.
-     */
-    public void sendMulticast() throws IOException {
-        //System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+PiApplication.name);
+    private void sendMulticast() throws IOException {
         DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getId(), PiApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
     }
 
-    /**
-     * Called whenever we receive a published message.
-     */
     public void deliver(Topic topic, ScribeContent content) {
-        //System.out.println("DHTPDClient.deliver(" + topic + "," + content + ")");
         String c= content.toString();
         String[] parts = c.split("/");
         parts[1] = parts[1].substring(0, parts[1].indexOf(" "));
@@ -120,26 +90,13 @@ public class DHTPDClient implements ScribeClient, Application {
         try {
             p = new DHTPDAnnounce(name, InetAddress.getByName(ip));
         } catch (UnknownHostException e) {
-            e.printStackTrace();
         }
 
-        try {
-            if (peerRepository.existsByName(p.getName())) {
-                return;
-            } else {
-                peerRepository.save(new Peer(p.getName(), p.getIP()));
-            }
-        } catch (ClassCastException e) {
-            System.out.println("DHT Error");;
-        }
+        if (!peerRepository.existsByName(p.getName()))
+            peerRepository.save(new Peer(p.getName(), p.getIP()));
 
     }
 
-    /**
-     * Called when we receive an anycast.  If we return
-     * false, it will be delivered elsewhere.  Returning true
-     * stops the message here.
-     */
     public boolean anycast(Topic topic, ScribeContent content) {
         boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0;
         System.out.println("DHTPDClient.anycast("+topic+","+ content +"):"+returnValue);
@@ -147,21 +104,17 @@ public class DHTPDClient implements ScribeClient, Application {
     }
 
     public void childAdded(Topic topic, NodeHandle child) {
-//    System.out.println("DHTPDClient.childAdded("+topic+","+child+")");
     }
 
     public void childRemoved(Topic topic, NodeHandle child) {
-//    System.out.println("DHTPDClient.childRemoved("+topic+","+child+")");
     }
 
     public void subscribeFailed(Topic topic) {
-//    System.out.println("DHTPDClient.childFailed("+topic+")");
     }
 
     public boolean forward(RouteMessage message) {
         return true;
     }
-
 
     public void update(NodeHandle handle, boolean joined) {
 
@@ -172,7 +125,6 @@ public class DHTPDClient implements ScribeClient, Application {
             return MAX_PRIORITY;
         }
     }
-
 
     /************ Some passthrough accessors for the myScribe *************/
     public boolean isRoot() {

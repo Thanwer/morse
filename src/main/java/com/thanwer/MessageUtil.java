@@ -32,9 +32,7 @@ public class MessageUtil implements Application{
         MessageUtil.peerRepository = peerRepository;
     }
 
-
-
-    public static void sendMessage(String id, String text) throws JsonProcessingException,ResourceAccessException {
+    static void sendMessage(String id, String text) throws JsonProcessingException,ResourceAccessException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -55,8 +53,6 @@ public class MessageUtil implements Application{
         String jsonMessage = mapper.writeValueAsString(test);
         HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
         restTemplate.postForObject(url, entity, String.class);
-
-
 
     }
 
