@@ -3,9 +3,11 @@ package com.thanwer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.IOException;
+import java.net.*;
 import java.util.List;
+
+import static com.thanwer.PiApplication.bootIP;
 
 /*
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,9 +44,16 @@ public class PeerUtil {
                 System.out.println(peer.toString());
     }
 
-    public static InetAddress getLanIP() throws UnknownHostException {
-        InetAddress addr = InetAddress.getLocalHost();
-        return InetAddress.getByName(addr.getHostAddress());
+    public static InetAddress getLanIP() throws IOException {
+        Socket s = null;
+        try {
+            s = new Socket(bootIP, 80);
+        } catch (ConnectException e) {
+            return InetAddress.getByName(bootIP);
+        }
+        InetAddress ip = s.getLocalAddress();
+        s.close();
+        return ip;
     }
 
     public static Peer findByName(String name){

@@ -19,6 +19,11 @@ public class DHTPDAnnounce implements ScribeContent {
         this.ip = ip;
     }
 
+    public DHTPDAnnounce(String name, InetAddress ip) {
+        this.name = name;
+        this.ip = ip;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,5 +37,5 @@ public class DHTPDAnnounce implements ScribeContent {
     }
 
     public String toString() {
-        return "DHTPDAnnounce #"+name+" from "+from+"IP: "+ip;}
+        return "DHTPDAnnounce /"+name+" from "+from+"IP: "+ip;}
 }

@@ -25,6 +25,8 @@ import rice.p2p.scribe.ScribeImpl;
 import rice.p2p.scribe.Topic;
 import rice.pastry.commonapi.PastryIdFactory;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -87,16 +89,17 @@ public class DHTPDClient implements ScribeClient, Application {
         if (message instanceof PublishContent) {
             try {
                 sendMulticast();
-            } catch (UnknownHostException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
+        }
+
 
     /**
      * Sends the multicast message.
      */
-    public void sendMulticast() throws UnknownHostException {
+    public void sendMulticast() throws IOException {
         //System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+PiApplication.name);
         DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getId(), PiApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
@@ -107,10 +110,20 @@ public class DHTPDClient implements ScribeClient, Application {
      */
     public void deliver(Topic topic, ScribeContent content) {
         //System.out.println("DHTPDClient.deliver(" + topic + "," + content + ")");
-        System.out.println(content.toString());
+        String c= content.toString();
+        String[] parts = c.split("/");
+        parts[1] = parts[1].substring(0, parts[1].indexOf(" "));
+        String name = parts[1];
+        String ip =parts[2];
+
+        DHTPDAnnounce p = null;
         try {
-            DHTPDAnnounce p = (((DHTPDAnnounce) content));
-            System.out.println(p.getIP());
+            p = new DHTPDAnnounce(name, InetAddress.getByName(ip));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        try {
             if (peerRepository.existsByName(p.getName())) {
                 return;
             } else {

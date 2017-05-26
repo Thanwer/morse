@@ -1,6 +1,7 @@
 package com.thanwer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -33,7 +34,11 @@ public class PeerSeeder implements Runnable {
             e.printStackTrace();
         }
         ipLAN=socket.getLocalAddress();
-        sendPeer(new Peer(name, ipLAN));
+        try {
+            sendPeer(new Peer(name, ipLAN));
+        } catch (DataIntegrityViolationException e) {
+
+        }
     }
         /*
         InetAddress addr = null;

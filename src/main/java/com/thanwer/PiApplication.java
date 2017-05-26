@@ -20,6 +20,8 @@ import java.util.Timer;
 @SpringBootApplication
 public class PiApplication {
     public static String name = "default";
+    //public static String bootIP="10.88.0.229";
+    public static String bootIP="174.138.48.96";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(PiApplication.class, args);
@@ -28,11 +30,7 @@ public class PiApplication {
         Environment env = new Environment();
         int bindport = 8081;
 
-
-        // build the bootaddress
-        InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
-        //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
-        //InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
+        InetAddress bootaddr = InetAddress.getByName(bootIP);
         int bootport = 8081;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
