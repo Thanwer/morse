@@ -51,10 +51,6 @@ public class DHTPDClient implements ScribeClient, Application {
     Scribe myScribe;
     Topic DiscoverTopic;
 
-    public Endpoint getEndpoint() {
-        return endpoint;
-    }
-
     protected Endpoint endpoint;
 
     public DHTPDClient(Node node) {
@@ -102,7 +98,7 @@ public class DHTPDClient implements ScribeClient, Application {
      */
     public void sendMulticast() throws UnknownHostException {
         //System.out.println("Node "+endpoint.getLocalNodeHandle()+" broadcasting "+PiApplication.name);
-        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getLocalNodeHandle(), PiApplication.name, PeerUtil.getLanIP());
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getId(), PiApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
     }
 
@@ -110,15 +106,20 @@ public class DHTPDClient implements ScribeClient, Application {
      * Called whenever we receive a published message.
      */
     public void deliver(Topic topic, ScribeContent content) {
-
         //System.out.println("DHTPDClient.deliver(" + topic + "," + content + ")");
-        DHTPDAnnounce p = (((DHTPDAnnounce) content));
-        //System.out.println(p.getIP());
-        if (peerRepository.existsByName(p.getName())) {
-            return;
-        } else {
-            peerRepository.save(new Peer(p.getName(), p.getIP()));
+        System.out.println(content.toString());
+        try {
+            DHTPDAnnounce p = (((DHTPDAnnounce) content));
+            System.out.println(p.getIP());
+            if (peerRepository.existsByName(p.getName())) {
+                return;
+            } else {
+                peerRepository.save(new Peer(p.getName(), p.getIP()));
+            }
+        } catch (ClassCastException e) {
+            System.out.println("DHT Error");;
         }
+
     }
 
     /**

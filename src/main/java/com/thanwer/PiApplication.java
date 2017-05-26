@@ -30,8 +30,8 @@ public class PiApplication {
 
 
         // build the bootaddress
-        //InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
-        InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
+        InetAddress bootaddr = InetAddress.getByName("174.138.48.96");
+        //InetAddress bootaddr = InetAddress.getByName("10.88.0.229");
         //InetAddress bootaddr = InetAddress.getByName("ec2-52-14-195-106.us-east-2.compute.amazonaws.com");
         int bootport = 8081;
         InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
@@ -72,7 +72,6 @@ public class PiApplication {
                 System.out.println("Host not found.");
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-
             }
 
         }

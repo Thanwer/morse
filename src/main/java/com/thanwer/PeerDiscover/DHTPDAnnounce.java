@@ -1,6 +1,6 @@
 package com.thanwer.PeerDiscover;
 
-import rice.p2p.commonapi.NodeHandle;
+import rice.p2p.commonapi.Id;
 import rice.p2p.scribe.ScribeContent;
 
 import java.net.InetAddress;
@@ -10,10 +10,10 @@ import java.net.InetAddress;
  */
 public class DHTPDAnnounce implements ScribeContent {
     private final String name;
-    NodeHandle from;
+    Id from;
     InetAddress ip;
 
-    public DHTPDAnnounce(NodeHandle from, String name, InetAddress ip) {
+    public DHTPDAnnounce(Id from, String name, InetAddress ip) {
         this.from = from;
         this.name = name;
         this.ip = ip;
@@ -23,7 +23,7 @@ public class DHTPDAnnounce implements ScribeContent {
         return name;
     }
 
-    public NodeHandle getFrom() {
+    public Id getFrom() {
         return from;
     }
 
