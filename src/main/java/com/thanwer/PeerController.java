@@ -31,11 +31,13 @@ public class PeerController {
 
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity<Peer> add(@RequestBody Peer peer){
-        peerRepository.save(peer);
-        //System.out.println(peer.toString());
-
-        return new ResponseEntity<>(peer, HttpStatus.OK);
+    public ResponseEntity<Peer> add(@RequestBody List<Peer> peerList){
+        for (Peer peer : peerList){
+            if(peerRepository.existsByName(peer.getName())){
+                peerRepository.save(peer);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

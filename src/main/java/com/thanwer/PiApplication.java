@@ -1,10 +1,7 @@
 package com.thanwer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.thanwer.PeerDiscover.DHTPDApp;
-import com.thanwer.PeerDiscover.DHTPDClient;
-import com.thanwer.PeerDiscover.LocalPeerDiscovery;
-import com.thanwer.PeerDiscover.LocalPeerDiscoveryClient;
+import com.thanwer.PeerDiscover.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.ResourceAccessException;
@@ -42,8 +39,11 @@ public class PiApplication {
         new Thread(new PeerSeeder(name)).start();
         new Thread(new LocalPeerDiscovery()).start();
 
-        Timer timer = new Timer();
-        timer.schedule(new LocalPeerDiscoveryClient(), 0, 60000);
+        Timer timer_lpd = new Timer();
+        timer_lpd.schedule(new LocalPeerDiscoveryClient(), 2000, 60000);
+
+        Timer timer_pex = new Timer();
+        timer_pex.schedule(new PeerExchange(), 6000, 300000);
 
         String s = "";
         String id;

@@ -35,7 +35,9 @@ public class PeerUtil {
     }
 
     public static void sendPeer (Peer peer) {
-        peerRepository.save(peer);
+        if (!peerRepository.existsByName(peer.getName())){
+            peerRepository.save(peer);
+        }
     }
 
     public static void getPeer(){
