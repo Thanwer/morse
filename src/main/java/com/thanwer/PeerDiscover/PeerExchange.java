@@ -48,7 +48,7 @@ public class PeerExchange extends TimerTask {
             headers.setContentType(MediaType.APPLICATION_JSON);
             String jsonMessage = null;
             try {
-                jsonMessage = mapper.writeValueAsString(peer);
+                jsonMessage = mapper.writeValueAsString(peerList);
             } catch (JsonProcessingException e) {
                 System.out.println("PEX Exception");
             }

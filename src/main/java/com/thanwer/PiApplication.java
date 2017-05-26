@@ -17,8 +17,8 @@ import java.util.Timer;
 @SpringBootApplication
 public class PiApplication {
     public static String name = "default";
-    //public static String bootIP="10.88.0.229";
-    public static String bootIP="174.138.48.96";
+    public static String bootIP="10.88.0.229";
+    //public static String bootIP="174.138.48.96";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(PiApplication.class, args);
