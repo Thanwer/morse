@@ -46,6 +46,10 @@ public class PeerUtil {
         InetAddress addr = InetAddress.getLocalHost();
         return InetAddress.getByName(addr.getHostAddress());
     }
+
+    public static Peer findByName(String name){
+        return peerRepository.findByName(name);
+    }
     /*
     public static  InetAddress getWanIP() throws IOException {
         URL whatismyip = new URL("http://checkip.amazonaws.com");

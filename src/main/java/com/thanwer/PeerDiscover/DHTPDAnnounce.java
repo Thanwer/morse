@@ -11,12 +11,12 @@ import java.net.InetAddress;
 public class DHTPDAnnounce implements ScribeContent {
     private final String name;
     NodeHandle from;
-    InetAddress ipLan;
+    InetAddress ip;
 
-    public DHTPDAnnounce(NodeHandle from, String name, InetAddress ipLan) {
+    public DHTPDAnnounce(NodeHandle from, String name, InetAddress ip) {
         this.from = from;
         this.name = name;
-        this.ipLan = ipLan;
+        this.ip = ip;
     }
 
     public String getName() {
@@ -27,10 +27,10 @@ public class DHTPDAnnounce implements ScribeContent {
         return from;
     }
 
-    public InetAddress getIpLan() {
-        return ipLan;
+    public InetAddress getIP() {
+        return ip;
     }
 
     public String toString() {
-        return "DHTPDAnnounce #"+name+" from "+from+"IP: "+ipLan;}
+        return "DHTPDAnnounce #"+name+" from "+from+"IP: "+ip;}
 }

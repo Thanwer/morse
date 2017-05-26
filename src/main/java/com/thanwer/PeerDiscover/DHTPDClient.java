@@ -50,6 +50,11 @@ public class DHTPDClient implements ScribeClient, Application {
     CancellableTask publishTask;
     Scribe myScribe;
     Topic DiscoverTopic;
+
+    public Endpoint getEndpoint() {
+        return endpoint;
+    }
+
     protected Endpoint endpoint;
 
     public DHTPDClient(Node node) {
@@ -107,11 +112,12 @@ public class DHTPDClient implements ScribeClient, Application {
     public void deliver(Topic topic, ScribeContent content) {
 
         //System.out.println("DHTPDClient.deliver(" + topic + "," + content + ")");
-        DHTPDAnnounce p = (DHTPDAnnounce) content;
+        DHTPDAnnounce p = (((DHTPDAnnounce) content));
+        //System.out.println(p.getIP());
         if (peerRepository.existsByName(p.getName())) {
             return;
         } else {
-            peerRepository.save(new Peer(p.getName(), p.getIpLan()));
+            peerRepository.save(new Peer(p.getName(), p.getIP()));
         }
     }
 
@@ -122,7 +128,7 @@ public class DHTPDClient implements ScribeClient, Application {
      */
     public boolean anycast(Topic topic, ScribeContent content) {
         boolean returnValue = myScribe.getEnvironment().getRandomSource().nextInt(3) == 0;
-        System.out.println("DHTPDClient.anycast("+topic+","+content+"):"+returnValue);
+        System.out.println("DHTPDClient.anycast("+topic+","+ content +"):"+returnValue);
         return returnValue;
     }
 

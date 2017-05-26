@@ -79,6 +79,7 @@ public class Message implements rice.p2p.commonapi.Message{
     public NodeHandle getNh() { return nh; }
 
     public void setNh(NodeHandle nh) { this.nh = nh; }
+
     @Override
     public String toString() {
         return "Message from "+ author +": "+text;

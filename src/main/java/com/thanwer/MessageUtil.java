@@ -34,34 +34,30 @@ public class MessageUtil implements Application{
 
 
 
-    public static void sendMessage(Endpoint endpoint, NodeHandle nh, String id, String text) throws JsonProcessingException,ResourceAccessException {
+    public static void sendMessage(String id, String text) throws JsonProcessingException,ResourceAccessException {
 
-        if(nh != null){
-            Message msg = new Message(nh, name , text);
-            endpoint.route(nh.getId(), msg, null);
+        ObjectMapper mapper = new ObjectMapper();
 
-        } else {
-            ObjectMapper mapper = new ObjectMapper();
-
-            Peer peer = peerRepository.findByName(id);
-            RestTemplate restTemplate = new RestTemplate();
-            String url = null;
-            try {
-                url = "http:/" + peer.getIpLAN() + ":8080/messages";
-            } catch (NullPointerException e) {
-                System.out.println("Peer not found");
-                return;
-            }
-
-            Message test = new Message(name, text);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            String jsonMessage = mapper.writeValueAsString(test);
-            HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
-            restTemplate.postForObject(url, entity, String.class);
-
+        Peer peer = peerRepository.findByName(id);
+        RestTemplate restTemplate = new RestTemplate();
+        String url = null;
+        try {
+            url = "http:/" + peer.getIpLAN() + ":8080/messages";
+        } catch (NullPointerException e) {
+            System.out.println("Peer not found");
+            return;
         }
+
+        Message test = new Message(name, text);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String jsonMessage = mapper.writeValueAsString(test);
+        HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
+        restTemplate.postForObject(url, entity, String.class);
+
+
+
     }
 
     @Override

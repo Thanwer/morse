@@ -24,8 +24,6 @@ public class Peer {
     @Id
     private InetAddress ipLAN;
 
-
-    private NodeHandle nh;
     //private int port;
 
     public Peer() {}
@@ -38,12 +36,6 @@ public class Peer {
     public Peer(String name, InetAddress ipLAN, InetAddress id) {
         this.name = name;
         this.ipLAN = ipLAN;
-    }
-
-    public Peer(String name, InetAddress ipLAN, NodeHandle nh) {
-        this.name = name;
-        this.ipLAN = ipLAN;
-        this.nh = nh;
     }
 
     /*public Peer(String name, InetAddress ipWAN, InetAddress ipLAN, int port) {
@@ -76,7 +68,5 @@ public class Peer {
         return "Name=" + name + " IP=" + ipLAN;
     }
 
-    public NodeHandle getNh() {
-        return nh;
-    }
+
 }
