@@ -34,7 +34,7 @@ public class PeerExchange extends TimerTask {
     @Override
     public void run() {
         List<Peer> peerList = peerRepository.findAll();
-        for (Peer peer : peerList){
+        for (Peer peer : peerList) {
             ObjectMapper mapper = new ObjectMapper();
             RestTemplate restTemplate = new RestTemplate();
             String url = null;
@@ -49,14 +49,11 @@ public class PeerExchange extends TimerTask {
             String jsonMessage = null;
             try {
                 jsonMessage = mapper.writeValueAsString(peerList);
-            } catch (JsonProcessingException e) {
+                HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
+                restTemplate.postForObject(url, entity, String.class);
+            } catch (Exception e) {
                 System.out.println("PEX Exception");
             }
-            HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
-            restTemplate.postForObject(url, entity, String.class);
-
         }
-
-
     }
 }
