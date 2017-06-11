@@ -1,15 +1,11 @@
-package com.thanwer;
+package com.thanwer.Peer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import static com.thanwer.PeerUtil.sendPeer;
 
 /**
  * Created by Thanwer on 02/04/2017.
@@ -18,7 +14,7 @@ import static com.thanwer.PeerUtil.sendPeer;
 public class PeerSeeder implements Runnable {
     private String name;
 
-    PeerSeeder(String name) {
+    public PeerSeeder(String name) {
         this.name = name;
     }
 
@@ -32,7 +28,7 @@ public class PeerSeeder implements Runnable {
         }
         InetAddress ipLAN = socket.getLocalAddress();
         try {
-            sendPeer(new Peer(name, ipLAN));
+            PeerUtil.sendPeer(new Peer(name, ipLAN));
         } catch (DataIntegrityViolationException e) {
 
         }

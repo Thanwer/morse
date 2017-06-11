@@ -1,4 +1,4 @@
-package com.thanwer;
+package com.thanwer.Peer;
 
 import rice.p2p.commonapi.NodeHandle;
 

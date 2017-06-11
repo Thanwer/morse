@@ -1,9 +1,8 @@
 package com.thanwer.PeerDiscover;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thanwer.Peer;
-import com.thanwer.PeerRepository;
+import com.thanwer.Peer.Peer;
+import com.thanwer.Peer.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.TimerTask;
-
-import static com.thanwer.PiApplication.name;
 
 /**
  * Created by Thanwer on 26/05/2017.

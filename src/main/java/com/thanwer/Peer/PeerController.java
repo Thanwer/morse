@@ -1,4 +1,4 @@
-package com.thanwer;
+package com.thanwer.Peer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

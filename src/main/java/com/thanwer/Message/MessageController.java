@@ -1,5 +1,7 @@
-package com.thanwer;
+package com.thanwer.Message;
 
+import com.thanwer.Peer.Peer;
+import com.thanwer.Peer.PeerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

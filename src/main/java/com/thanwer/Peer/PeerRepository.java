@@ -1,8 +1,7 @@
-package com.thanwer;
+package com.thanwer.Peer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import rice.p2p.commonapi.Id;
 
 /**
  * Created by Thanwer on 02/04/2017.

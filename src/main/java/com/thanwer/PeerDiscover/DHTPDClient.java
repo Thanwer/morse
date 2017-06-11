@@ -4,9 +4,9 @@ package com.thanwer.PeerDiscover;
  * Created by Thanwer on 18/05/2017.
  */
 
-import com.thanwer.Peer;
-import com.thanwer.PeerRepository;
-import com.thanwer.PeerUtil;
+import com.thanwer.Peer.Peer;
+import com.thanwer.Peer.PeerRepository;
+import com.thanwer.Peer.PeerUtil;
 import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,23 +1,21 @@
-package com.thanwer;
+package com.thanwer.Message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thanwer.Peer.Peer;
+import com.thanwer.Peer.PeerRepository;
+import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import rice.p2p.commonapi.Application;
-import rice.p2p.commonapi.Endpoint;
 import rice.p2p.commonapi.Id;
 import rice.p2p.commonapi.RouteMessage;
-import rice.pastry.NodeHandle;
-
-import javax.validation.constraints.Null;
-
-import static com.thanwer.PiApplication.name;
 
 /**
  * Created by Thanwer on 13/05/2017.
@@ -26,17 +24,19 @@ import static com.thanwer.PiApplication.name;
 public class MessageUtil implements Application{
 
     private static PeerRepository peerRepository;
+    private static MessageQueueRepository messageQueueRepository;
 
     @Autowired
-    public MessageUtil(PeerRepository peerRepository){
+    public MessageUtil(PeerRepository peerRepository, MessageQueueRepository messageQueueRepository){
         MessageUtil.peerRepository = peerRepository;
+        MessageUtil.messageQueueRepository = messageQueueRepository;
     }
 
-    static void sendMessage(String id, String text) throws JsonProcessingException,ResourceAccessException {
+    public static void sendMessage(String name, String text) throws JsonProcessingException,ResourceAccessException {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        Peer peer = peerRepository.findByName(id);
+        Peer peer = peerRepository.findByName(name);
         RestTemplate restTemplate = new RestTemplate();
         String url = null;
         try {
@@ -46,13 +46,17 @@ public class MessageUtil implements Application{
             return;
         }
 
-        Message test = new Message(name, text);
+        Message test = new Message(PiApplication.name, text);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         String jsonMessage = mapper.writeValueAsString(test);
         HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
-        restTemplate.postForObject(url, entity, String.class);
+        try {
+            restTemplate.postForObject(url, entity, String.class);
+        } catch (ResourceAccessException e) {
+            messageQueueRepository.save(new MessageQueue(name,text));
+        }
 
     }
 

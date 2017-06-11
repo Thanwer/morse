@@ -1,7 +1,7 @@
 package com.thanwer.PeerDiscover;
 
-import com.thanwer.Peer;
-import com.thanwer.PeerRepository;
+import com.thanwer.Peer.Peer;
+import com.thanwer.Peer.PeerRepository;
 import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 public class LocalPeerDiscoveryClient extends TimerTask {
 
 
-    DatagramSocket c;
     private static PeerRepository peerRepository;
 
     public LocalPeerDiscoveryClient() {}
@@ -36,7 +35,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
         // Find the server using UDP broadcast
         try {
             //Open a random port to send the package
-            c = new DatagramSocket();
+            DatagramSocket c = new DatagramSocket();
             c.setBroadcast(true);
 
             byte[] sendData = PiApplication.name.getBytes();
@@ -60,9 +59,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
 
                 for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
                     //Skip Loopback
-                    if (interfaceAddress.getAddress().isLoopbackAddress()) {
-                        continue;
-                    } else {
+                    if (!interfaceAddress.getAddress().isLoopbackAddress()) {
                         InetAddress broadcast = interfaceAddress.getBroadcast();
                         if (broadcast == null) {
                             continue;
@@ -80,7 +77,11 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             c.receive(receivePacket);
 
             String message = new String(receivePacket.getData()).trim();
+
             peerRepository.save(new Peer(message, receivePacket.getAddress()));
+
+
+
             //}
 
             //Close the port!

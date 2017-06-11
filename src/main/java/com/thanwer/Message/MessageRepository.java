@@ -1,4 +1,4 @@
-package com.thanwer;
+package com.thanwer.Message;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

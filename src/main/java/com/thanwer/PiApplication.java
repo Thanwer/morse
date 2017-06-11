@@ -1,6 +1,9 @@
 package com.thanwer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.thanwer.Message.MessageUtil;
+import com.thanwer.Peer.PeerSeeder;
+import com.thanwer.Peer.PeerUtil;
 import com.thanwer.PeerDiscover.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +20,7 @@ import java.util.Timer;
 public class PiApplication {
     public static String name = "default";
     //static String bootIP="10.88.0.229";
-    static String bootIP="174.138.48.96";
+    public static String bootIP="174.138.48.96";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(PiApplication.class, args);
@@ -37,6 +40,7 @@ public class PiApplication {
         new Thread(new DHTPDApp(bindport, bootaddress, env)).start();
         new Thread(new PeerSeeder(name)).start();
         new Thread(new LocalPeerDiscovery()).start();
+
 
         Timer timer_lpd = new Timer();
         timer_lpd.schedule(new LocalPeerDiscoveryClient(), 2000, 60000);
