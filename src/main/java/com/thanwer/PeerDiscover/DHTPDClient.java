@@ -4,6 +4,8 @@ package com.thanwer.PeerDiscover;
  * Created by Thanwer on 18/05/2017.
  */
 
+import com.thanwer.Message.MessageQueueRepository;
+import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.Peer;
 import com.thanwer.Peer.PeerRepository;
 import com.thanwer.Peer.PeerUtil;
@@ -34,15 +36,16 @@ public class DHTPDClient implements ScribeClient, Application {
 
 
     private static PeerRepository peerRepository;
+    private static MessageQueueRepository messageQueueRepository;
 
     public DHTPDClient() { }
 
     @Autowired
-    public DHTPDClient(PeerRepository peerRepository){
+    public DHTPDClient(PeerRepository peerRepository, MessageQueueRepository messageQueueRepository){
         DHTPDClient.peerRepository = peerRepository;
+        DHTPDClient.messageQueueRepository = messageQueueRepository;
     }
 
-    int seqNum = 0;
     private Scribe myScribe;
     private Topic DiscoverTopic;
 
@@ -83,17 +86,24 @@ public class DHTPDClient implements ScribeClient, Application {
         String c= content.toString();
         String[] parts = c.split("/");
         parts[1] = parts[1].substring(0, parts[1].indexOf(" "));
-        String name = parts[1];
+        String pname = parts[1];
         String ip =parts[2];
 
         DHTPDAnnounce p = null;
         try {
-            p = new DHTPDAnnounce(name, InetAddress.getByName(ip));
+            p = new DHTPDAnnounce(pname, InetAddress.getByName(ip));
         } catch (UnknownHostException e) {
         }
 
-        if (!peerRepository.existsByName(p.getName()))
-            peerRepository.save(new Peer(p.getName(), p.getIP()));
+        Peer peer = new Peer(p.getName(), p.getIP());
+        if(!peerRepository.existsByName(peer.getName())){
+            peerRepository.save(peer);
+        }
+        if(messageQueueRepository.existsByName(peer.getName())){
+            String name = messageQueueRepository.findByName(peer.getName()).getName();
+            String text = messageQueueRepository.findByName(peer.getName()).getText();
+            MessageUtil.sendMessage(name,text);
+        }
 
     }
 
@@ -132,10 +142,7 @@ public class DHTPDClient implements ScribeClient, Application {
     }
 
     public NodeHandle getParent() {
-        // NOTE: Was just added to the Scribe interface.  May need to cast myScribe to a
-        // ScribeImpl if using 1.4.1_01 or older.
         return ((ScribeImpl)myScribe).getParent(DiscoverTopic);
-        //return myScribe.getParent(DiscoverTopic);
     }
 
     public NodeHandle[] getChildren() {

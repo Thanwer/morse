@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.thanwer.PiApplication.bootIP;
@@ -40,6 +42,19 @@ public class PeerUtil {
         }
     }
 
+    public static List<InetSocketAddress> getAddressList (){
+        List<Peer> peerList = peerRepository.findAll();
+        List<InetSocketAddress> addressList = new ArrayList<>();
+        try {
+            addressList.add(new InetSocketAddress((InetAddress.getByName(bootIP)),8081));
+        } catch (UnknownHostException e) {
+            System.err.print("Unknown bootIP host.");
+        }
+        for (Peer peer : peerList)
+            addressList.add(new InetSocketAddress((peer.getIpLAN()),8081));
+        return addressList;
+    }
+
     public static void getPeer(){
         List<Peer> peerList = peerRepository.findAll();
         for (Peer peer : peerList)
@@ -58,9 +73,6 @@ public class PeerUtil {
         return ip;
     }
 
-    public static Peer findByName(String name){
-        return peerRepository.findByName(name);
-    }
     /*
     public static  InetAddress getWanIP() throws IOException {
         URL whatismyip = new URL("http://checkip.amazonaws.com");

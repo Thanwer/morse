@@ -1,5 +1,7 @@
 package com.thanwer.PeerDiscover;
 
+import com.thanwer.Message.MessageQueueRepository;
+import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.Peer;
 import com.thanwer.Peer.PeerRepository;
 import com.thanwer.PiApplication;
@@ -22,12 +24,14 @@ public class LocalPeerDiscoveryClient extends TimerTask {
 
 
     private static PeerRepository peerRepository;
+    private static MessageQueueRepository messageQueueRepository;
 
     public LocalPeerDiscoveryClient() {}
 
     @Autowired
-    public LocalPeerDiscoveryClient(PeerRepository peerRepository){
+    public LocalPeerDiscoveryClient(PeerRepository peerRepository, MessageQueueRepository messageQueueRepository){
         LocalPeerDiscoveryClient.peerRepository = peerRepository;
+        LocalPeerDiscoveryClient.messageQueueRepository = messageQueueRepository;
     }
 
     @Override
@@ -77,12 +81,17 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             c.receive(receivePacket);
 
             String message = new String(receivePacket.getData()).trim();
+            Peer peer = new Peer(message, receivePacket.getAddress());
 
-            peerRepository.save(new Peer(message, receivePacket.getAddress()));
+            if(!peerRepository.existsByName(peer.getName())){
+                peerRepository.save(peer);
+            }
+            if(messageQueueRepository.existsByName(peer.getName())){
+                String name = messageQueueRepository.findByName(peer.getName()).getName();
+                String text = messageQueueRepository.findByName(peer.getName()).getText();
+                MessageUtil.sendMessage(name,text);
+            }
 
-
-
-            //}
 
             //Close the port!
             c.close();

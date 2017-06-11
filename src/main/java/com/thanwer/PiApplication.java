@@ -24,20 +24,13 @@ public class PiApplication {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(PiApplication.class, args);
-
-
         Environment env = new Environment();
-        int bindport = 8081;
-
-        InetAddress bootaddr = InetAddress.getByName(bootIP);
-        int bootport = 8081;
-        InetSocketAddress bootaddress = new InetSocketAddress(bootaddr, bootport);
 
         System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
         name = scan.next();
 
-        new Thread(new DHTPDApp(bindport, bootaddress, env)).start();
+        new Thread(new DHTPDApp(env)).start();
         new Thread(new PeerSeeder(name)).start();
         new Thread(new LocalPeerDiscovery()).start();
 
@@ -66,14 +59,7 @@ public class PiApplication {
             scan1 = new Scanner(System.in);
             System.out.println("Text: ");
             s = scan1.next();
-
-            try {
-                MessageUtil.sendMessage(id, s);
-            } catch (ResourceAccessException e) {
-                System.out.println("Host not found.");
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            MessageUtil.sendMessage(id, s);
 
         }
         System.exit(0);

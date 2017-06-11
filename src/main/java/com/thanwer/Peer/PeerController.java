@@ -1,5 +1,8 @@
 package com.thanwer.Peer;
 
+import com.thanwer.Message.MessageQueue;
+import com.thanwer.Message.MessageQueueRepository;
+import com.thanwer.Message.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +32,10 @@ public class PeerController {
         return peerRepository.findAll();
     }
 
-
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Peer> add(@RequestBody List<Peer> peerList){
         for (Peer peer : peerList){
-            if(peerRepository.existsByName(peer.getName())){
+            if(!peerRepository.existsByName(peer.getName())){
                 peerRepository.save(peer);
             }
         }

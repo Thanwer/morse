@@ -32,13 +32,13 @@ public class MessageUtil implements Application{
         MessageUtil.messageQueueRepository = messageQueueRepository;
     }
 
-    public static void sendMessage(String name, String text) throws JsonProcessingException,ResourceAccessException {
+    public static void sendMessage(String name, String text) {
 
         ObjectMapper mapper = new ObjectMapper();
 
         Peer peer = peerRepository.findByName(name);
         RestTemplate restTemplate = new RestTemplate();
-        String url = null;
+        String url;
         try {
             url = "http:/" + peer.getIpLAN() + ":8080/messages";
         } catch (NullPointerException e) {
@@ -50,7 +50,12 @@ public class MessageUtil implements Application{
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String jsonMessage = mapper.writeValueAsString(test);
+        String jsonMessage = null;
+        try {
+            jsonMessage = mapper.writeValueAsString(test);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
         try {
             restTemplate.postForObject(url, entity, String.class);
