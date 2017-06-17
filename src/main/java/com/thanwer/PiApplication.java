@@ -45,21 +45,25 @@ public class PiApplication {
         String id;
 
         while (!s.equals("OK")) {
-
-            System.out.println("Peer List: ");
-            PeerUtil.getPeer();
-            System.out.println();
-            System.out.println();
-
-            System.out.println("\nName: ");
-            Scanner scan1 = new Scanner(System.in);
-            id = scan1.next();
-
-
+            Scanner scan1;
             scan1 = new Scanner(System.in);
-            System.out.println("Text: ");
-            s = scan1.next();
-            MessageUtil.sendMessage(id, s);
+
+            do {
+                System.out.println("Peer List: [R]efresh ");
+                PeerUtil.getPeer();
+                System.out.println();
+                System.out.println();
+                System.out.println("\nName: ");
+                id = scan1.next();
+            } while (id.equals("r"));
+
+            System.out.println("\n[E] to escape: ");
+
+            do {
+                System.out.print("["+id+"] : ");
+                s = scan1.next();
+                MessageUtil.sendMessage(id, s);
+            } while (!s.equals("E"));
 
         }
         System.exit(0);
