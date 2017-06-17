@@ -14,7 +14,7 @@ import java.util.Date;
  */
 
 @Entity
-public class Message implements rice.p2p.commonapi.Message{
+public class Message{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -89,8 +89,4 @@ public class Message implements rice.p2p.commonapi.Message{
         return id;
     }
 
-    @Override
-    public int getPriority() {
-        return Message.LOW_PRIORITY;
-    }
 }
