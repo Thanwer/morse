@@ -49,7 +49,7 @@ public class PeerExchange extends TimerTask {
                 HttpEntity<String> entity = new HttpEntity<String>(jsonMessage, headers);
                 restTemplate.postForObject(url, entity, String.class);
             } catch (Exception e) {
-                System.out.println("PEX Exception");
+                //System.out.println("PEX Exception");
             }
         }
     }

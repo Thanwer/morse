@@ -17,6 +17,8 @@ import rice.p2p.commonapi.Application;
 import rice.p2p.commonapi.Id;
 import rice.p2p.commonapi.RouteMessage;
 
+import java.util.List;
+
 /**
  * Created by Thanwer on 13/05/2017.
  */
@@ -36,14 +38,19 @@ public class MessageUtil implements Application{
 
         ObjectMapper mapper = new ObjectMapper();
 
-        Peer peer = peerRepository.findByName(name);
+        List<Peer> peerList = peerRepository.findByName(name);
+        Peer peer = null;
+        String url = null;
         RestTemplate restTemplate = new RestTemplate();
-        String url;
         try {
-            url = "http:/" + peer.getIpLAN() + ":8080/messages";
-        } catch (NullPointerException e) {
-            System.out.println("Peer not found");
-            return;
+            peer = peerList.get(0);
+            try {
+                url = "http:/" + peer.getIpLAN() + ":8080/messages";
+            } catch (NullPointerException e) {
+                System.out.println("Peer not found");
+                return;
+            }
+        } catch (Exception e) {
         }
 
         Message test = new Message(PiApplication.name, text);

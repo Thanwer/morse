@@ -38,7 +38,7 @@ public class PeerUtil {
 
     public static void sendPeer (Peer peer) {
         if (!peerRepository.existsByName(peer.getName())){
-            peerRepository.save(peer);
+            peerRepository.saveAndFlush(peer);
         }
     }
 
@@ -64,7 +64,7 @@ public class PeerUtil {
     public static InetAddress getLanIP() throws IOException {
         Socket s = null;
         try {
-            s = new Socket(bootIP, 80);
+            s = new Socket(bootIP,8080);
         } catch (ConnectException e) {
             return InetAddress.getByName(bootIP);
         }

@@ -1,5 +1,6 @@
 package com.thanwer.PeerDiscover;
 
+import com.thanwer.Message.MessageQueue;
 import com.thanwer.Message.MessageQueueRepository;
 import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.Peer;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,9 +90,12 @@ public class LocalPeerDiscoveryClient extends TimerTask {
                 peerRepository.save(peer);
             }
             if(messageQueueRepository.existsByName(peer.getName())){
-                String name = messageQueueRepository.findByName(peer.getName()).getName();
-                String text = messageQueueRepository.findByName(peer.getName()).getText();
-                MessageUtil.sendMessage(name,text);
+                List<MessageQueue> messageQueueList = new ArrayList<>(messageQueueRepository.findByName(peer.getName()));
+                for (MessageQueue messageQueue : messageQueueList) {
+                    String name = messageQueue.getName();
+                    String text = messageQueue.getText();
+                    MessageUtil.sendMessage(name, text);
+                }
             }
 
 

@@ -4,6 +4,7 @@ package com.thanwer.PeerDiscover;
  * Created by Thanwer on 18/05/2017.
  */
 
+import com.thanwer.Message.MessageQueue;
 import com.thanwer.Message.MessageQueueRepository;
 import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.Peer;
@@ -30,6 +31,8 @@ import rice.pastry.commonapi.PastryIdFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DHTPDClient implements ScribeClient, Application {
@@ -78,7 +81,7 @@ public class DHTPDClient implements ScribeClient, Application {
     }
 
     private void sendMulticast() throws IOException {
-        DHTPDAnnounce myMessage = new DHTPDAnnounce(endpoint.getId(), PiApplication.name, PeerUtil.getLanIP());
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(PiApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
     }
 
@@ -100,9 +103,12 @@ public class DHTPDClient implements ScribeClient, Application {
             peerRepository.save(peer);
         }
         if(messageQueueRepository.existsByName(peer.getName())){
-            String name = messageQueueRepository.findByName(peer.getName()).getName();
-            String text = messageQueueRepository.findByName(peer.getName()).getText();
-            MessageUtil.sendMessage(name,text);
+            List <MessageQueue> messageQueueList = new ArrayList<>(messageQueueRepository.findByName(peer.getName()));
+            for (MessageQueue messageQueue : messageQueueList) {
+                String name = messageQueue.getName();
+                String text = messageQueue.getText();
+                MessageUtil.sendMessage(name, text);
+            }
         }
 
     }

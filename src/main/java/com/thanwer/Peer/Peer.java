@@ -2,6 +2,7 @@ package com.thanwer.Peer;
 
 import rice.p2p.commonapi.NodeHandle;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.net.InetAddress;
