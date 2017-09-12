@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
@@ -33,6 +34,7 @@ public class MessageUtil implements Application{
         MessageUtil.peerRepository = peerRepository;
         MessageUtil.messageQueueRepository = messageQueueRepository;
     }
+
 
     public static void sendMessage(String name, String text) {
 

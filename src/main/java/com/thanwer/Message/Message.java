@@ -19,10 +19,10 @@ public class Message{
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    private NodeHandle nh;
     private String author;
     private Date createDate;
     private String text;
+    private String peer;
 
     public Message() {}
 
@@ -31,23 +31,25 @@ public class Message{
         this.createDate = Date.from(Instant.now());
     }
 
-    public Message(String author, String text) {
-        this.author = author;
+    public Message(String text, String peer) {
         this.createDate = Date.from(Instant.now());
         this.text = text;
+        this.peer = peer;
     }
 
-    public Message(NodeHandle nh, String author, String text) {
-        this.nh = nh;
-        this.author = author;
-        this.text = text;
-    }
 
     public Message(String author, Date createDate, String text) {
         this.author = author;
         this.createDate = createDate;
         this.text = text;
     }
+
+    public Message(String author, String text, String peer) {
+        this.author = author;
+        this.text = text;
+        this.peer = peer;
+    }
+
 
     public String getText() {
         return text;
@@ -73,10 +75,6 @@ public class Message{
         this.createDate = createDate;
     }
 
-    public NodeHandle getNh() { return nh; }
-
-    public void setNh(NodeHandle nh) { this.nh = nh; }
-
     @Override
     /*public String toString() {
         return "Message from "+ author +": "+text;
@@ -89,4 +87,11 @@ public class Message{
         return id;
     }
 
+    public String getPeer() {
+        return peer;
+    }
+
+    public void setPeer(String peer) {
+        this.peer = peer;
+    }
 }
