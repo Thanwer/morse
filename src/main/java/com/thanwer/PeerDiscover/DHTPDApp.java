@@ -1,7 +1,6 @@
 package com.thanwer.PeerDiscover;
 
 import java.io.IOException;
-import java.net.*;
 
 import com.thanwer.Peer.PeerUtil;
 import rice.environment.Environment;
@@ -49,7 +48,7 @@ public class DHTPDApp implements Runnable{
                 // abort if can't join
                 //System.out.println("DHT OFF! ");
             }
-            System.out.println("DHT OK! ");
+            //System.out.println("DHT OK! ");
         }
         app.subscribe();
         app.startPublishTask();

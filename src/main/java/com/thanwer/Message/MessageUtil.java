@@ -10,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
@@ -36,7 +37,7 @@ public class MessageUtil implements Application{
     }
 
 
-    public static void sendMessage(String name, String text) {
+    public static Message sendMessage(String name, String text) {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -50,7 +51,7 @@ public class MessageUtil implements Application{
                 url = "http:/" + peer.getIpLAN() + ":8080/messages";
             } catch (NullPointerException e) {
                 System.out.println("Peer not found");
-                return;
+                return new Message("Error.");
             }
         } catch (Exception e) {
         }
@@ -71,7 +72,7 @@ public class MessageUtil implements Application{
         } catch (ResourceAccessException e) {
             messageQueueRepository.save(new MessageQueue(name,text));
         }
-
+        return test;
     }
 
     @Override

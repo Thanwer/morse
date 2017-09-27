@@ -45,6 +45,7 @@ public class Message{
     }
 
     public Message(String author, String text, String peer) {
+        this.createDate = Date.from(Instant.now());
         this.author = author;
         this.text = text;
         this.peer = peer;

@@ -26,9 +26,9 @@ public class PiApplication {
         SpringApplication.run(PiApplication.class, args);
         Environment env = new Environment();
 
-        System.out.println("\nName: ");
+        /*System.out.println("\nName: ");
         Scanner scan = new Scanner(System.in);
-        name = scan.next();
+        name = scan.next();*/
 
         new Thread(new DHTPDApp(env)).start();
         new Thread(new PeerSeeder(name)).start();
@@ -40,7 +40,7 @@ public class PiApplication {
 
         Timer timer_pex = new Timer();
         timer_pex.schedule(new PeerExchange(), 6000, 300000);
-
+        /*
         String s = "";
         String id;
 
@@ -66,6 +66,6 @@ public class PiApplication {
             } while (!s.equals("E"));
 
         }
-        System.exit(0);
+        System.exit(0);*/
     }
 }
