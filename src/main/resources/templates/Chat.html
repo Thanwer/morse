@@ -26,17 +26,19 @@
 <div id="chat-page" class="hidden">
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Spring WebSocket Chat Demo</h2>
+            <h2>MOrse</h2>
         </div>
         <div class="connecting">
             Connecting...
         </div>
+
         <ul id="messageArea">
 
         </ul>
         <form id="messageForm" name="messageForm" nameForm="messageForm">
             <div class="form-group">
                 <div class="input-group clearfix">
+                    <input type="text" id="destination" placeholder="Destination" autocomplete="off" class="form-control"/>
                     <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
                     <button type="submit" class="primary">Send</button>
                 </div>
@@ -48,5 +50,7 @@
 <script src="/js/sockjs.min.js"></script>
 <script src="/js/stomp.min.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/users.js"></script>
 </body>
 </html>

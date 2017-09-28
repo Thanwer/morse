@@ -2,6 +2,7 @@
 
 var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
+var destinationInput = document.querySelector('#destination');
 var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
@@ -15,6 +16,7 @@ var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
+
 
 function connect(event) {
     username = document.querySelector('#name').value.trim();
@@ -58,7 +60,7 @@ function sendMessage(event) {
 
     if(messageContent && stompClient) {
     var chatMessage = {
-            destination: username,
+            destination: destinationInput.value,
             content: messageInput.value,
             type: 'CHAT'
         };
