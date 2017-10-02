@@ -6,10 +6,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static com.thanwer.PiApplication.bootIP;
+import static com.thanwer.MorseApplication.bootIP;
 
 /*
 import com.fasterxml.jackson.core.JsonProcessingException;

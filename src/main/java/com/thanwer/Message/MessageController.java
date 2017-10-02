@@ -1,6 +1,6 @@
 package com.thanwer.Message;
 
-import com.thanwer.PiApplication;
+import com.thanwer.MorseApplication;
 import com.thanwer.View.ChatMessage;
 import com.thanwer.View.PeerMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class MessageController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/channel/local")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-        if (Objects.equals(chatMessage.getDestination(),PiApplication.name)){
+        if (Objects.equals(chatMessage.getDestination(), MorseApplication.name)){
             messageRepository.save(new Message(chatMessage.getDestination(),chatMessage.getContent()));
         return chatMessage;
         } else {
@@ -53,7 +53,7 @@ public class MessageController {
     //@MessageMapping("/chat.sendMessage")
     //@SendTo("/channel/local")
     public Message save(@RequestBody Message message) {
-        if (Objects.equals(message.getPeer(), PiApplication.name)){
+        if (Objects.equals(message.getPeer(), MorseApplication.name)){
             messageRepository.save(message);
             template.convertAndSend("/channel/local", new ChatMessage (message.getText(),message.getAuthor()));
             return message;
@@ -69,7 +69,7 @@ public class MessageController {
                                SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", peerMessage.getName());
-        PiApplication.name=peerMessage.getName();
+        MorseApplication.name=peerMessage.getName();
         return peerMessage;
     }
 

@@ -5,7 +5,7 @@ import com.thanwer.Message.MessageQueueRepository;
 import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.Peer;
 import com.thanwer.Peer.PeerRepository;
-import com.thanwer.PiApplication;
+import com.thanwer.MorseApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +45,7 @@ public class LocalPeerDiscoveryClient extends TimerTask {
             DatagramSocket c = new DatagramSocket();
             c.setBroadcast(true);
 
-            byte[] sendData = PiApplication.name.getBytes();
+            byte[] sendData = MorseApplication.name.getBytes();
 
             //Try the 255.255.255.255 first
             try {

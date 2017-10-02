@@ -2,18 +2,15 @@ package com.thanwer.Message;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thanwer.MorseApplication;
 import com.thanwer.Peer.Peer;
 import com.thanwer.Peer.PeerRepository;
-import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import rice.p2p.commonapi.Application;
 import rice.p2p.commonapi.Id;
@@ -56,7 +53,7 @@ public class MessageUtil implements Application{
         } catch (Exception e) {
         }
 
-        Message test = new Message(PiApplication.name, text);
+        Message test = new Message(MorseApplication.name, text);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

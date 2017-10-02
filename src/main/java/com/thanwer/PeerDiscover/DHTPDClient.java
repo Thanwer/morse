@@ -7,10 +7,10 @@ package com.thanwer.PeerDiscover;
 import com.thanwer.Message.MessageQueue;
 import com.thanwer.Message.MessageQueueRepository;
 import com.thanwer.Message.MessageUtil;
+import com.thanwer.MorseApplication;
 import com.thanwer.Peer.Peer;
 import com.thanwer.Peer.PeerRepository;
 import com.thanwer.Peer.PeerUtil;
-import com.thanwer.PiApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rice.p2p.commonapi.*;
@@ -81,7 +81,7 @@ public class DHTPDClient implements ScribeClient, Application {
     }
 
     private void sendMulticast() throws IOException {
-        DHTPDAnnounce myMessage = new DHTPDAnnounce(PiApplication.name, PeerUtil.getLanIP());
+        DHTPDAnnounce myMessage = new DHTPDAnnounce(MorseApplication.name, PeerUtil.getLanIP());
         myScribe.publish(DiscoverTopic, myMessage);
     }
 
