@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Spring Boot WebSocket Chat Application</title>
+    <title>Morse</title>
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 <body>
@@ -26,11 +26,13 @@
 <div id="chat-page" class="hidden">
     <div class="chat-container">
         <div class="chat-header">
-            <h2>MOrse</h2>
+            <h2>Morse</h2>
         </div>
         <div class="connecting">
             Connecting...
         </div>
+
+        <p class="peer-name"> </p>
 
         <ul id="messageArea">
 
@@ -51,6 +53,6 @@
 <script src="/js/stomp.min.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/jquery.min.js"></script>
-<script src="/js/users.js"></script>
+<script src="/js/peer.js"></script>
 </body>
 </html>
