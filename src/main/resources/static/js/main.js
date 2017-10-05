@@ -129,17 +129,12 @@ setInterval(function refreshPeers() {
         url: "http://localhost:8080/peer"
     }).then(function(data) {
         $('.peer-name').empty();
-        $('.peer-name').append("<ul>");
         $.each(data, function(i, peer){
-            $('.peer-name').append("<li>"+peer.name+"</br></li>");
+            $('.peer-name').append("<li>"+peer.name+"</li>");
         })
-        $('.peer-name').append("</ul>");
     });
 },5000);
 
-function peerClick(event) {
-        var target = event.target || event.srcElement;
-        alert(event.target.innerHTML);
-}
+
 usernameForm.addEventListener('submit', connect, true)
 messageForm.addEventListener('submit', sendMessage, true)
