@@ -122,18 +122,17 @@ function getAvatarColor(messageSender) {
 
 
 
-
-
 setInterval(function refreshPeers() {
     $.ajax({
-        url: "http://localhost:8080/peer"
+        url: "http://"+window.location.hostname+":8080/peer"
     }).then(function(data) {
-        $('.peer-name').empty();
+        $('#peerList').empty();
         $.each(data, function(i, peer){
-            $('.peer-name').append("<li>"+peer.name+"</li>");
+            $('#peerList').append("<li>"+peer.name+"</li>");
         })
     });
 },5000);
+
 
 
 usernameForm.addEventListener('submit', connect, true)

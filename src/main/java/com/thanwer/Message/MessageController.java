@@ -53,14 +53,14 @@ public class MessageController {
     //@MessageMapping("/chat.sendMessage")
     //@SendTo("/channel/local")
     public Message save(@RequestBody Message message) {
-        if (Objects.equals(message.getPeer(), MorseApplication.name)){
+        //if (Objects.equals(message.getPeer(), MorseApplication.name)){
             messageRepository.save(message);
             template.convertAndSend("/channel/local", new ChatMessage (message.getText(),message.getAuthor()));
-            return message;
+            return message;/*
         } else {
             MessageUtil.sendMessage(message.getPeer(),message.getText());
             return message;
-        }
+        }*/
     }
 
     @MessageMapping("/chat.addUser")

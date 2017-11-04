@@ -1,19 +1,22 @@
 package com.thanwer;
 
+import com.thanwer.Message.MessageUtil;
 import com.thanwer.Peer.PeerSeeder;
+import com.thanwer.Peer.PeerUtil;
 import com.thanwer.PeerDiscover.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import rice.environment.Environment;
 
+import java.util.Scanner;
 import java.util.Timer;
 
 
 @SpringBootApplication
 public class MorseApplication {
     public static String name = "default";
-    //static String bootIP="10.88.0.229";
-    public static String bootIP="174.138.48.96";
+    //public static String bootIP="10.88.0.18";
+    public static String bootIP="165.227.184.133";
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(MorseApplication.class, args);
@@ -33,8 +36,8 @@ public class MorseApplication {
 
         Timer timer_pex = new Timer();
         timer_pex.schedule(new PeerExchange(), 6000, 300000);
-        /*
-        String s = "";
+
+        /*String s = "";
         String id;
 
         while (!s.equals("OK")) {

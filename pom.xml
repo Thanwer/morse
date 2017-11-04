@@ -5,7 +5,7 @@
 
 	<groupId>com.thanwer</groupId>
 	<artifactId>morse</artifactId>
-	<version>36.0.2</version>
+	<version>87.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>morse</name>
